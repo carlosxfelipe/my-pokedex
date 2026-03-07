@@ -1,10 +1,11 @@
 import React from "react";
-import { StatusBar } from "react-native";
+import { StatusBar, useColorScheme } from "react-native";
 
 export function ThemedStatusBar() {
+  const colorScheme = useColorScheme();
   return (
     <StatusBar
-      barStyle="light-content"
+      barStyle={colorScheme === "dark" ? "dark-content" : "light-content"}
       backgroundColor="transparent"
       translucent
     />

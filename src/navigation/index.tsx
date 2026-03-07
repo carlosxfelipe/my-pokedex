@@ -4,10 +4,12 @@ import {
   createStaticNavigation,
   StaticParamList,
 } from "@react-navigation/native";
+import { useTheme } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import type { ComponentProps } from "react";
+import { View } from "react-native";
 import type { Theme as AppTheme } from "../themes";
 
 import { HeaderGradient } from "../components/HeaderGradient";
@@ -19,23 +21,63 @@ import { NotFound } from "./screens/NotFound";
 
 type MaterialIconName = ComponentProps<typeof MaterialCommunityIcons>["name"];
 
+function TabBarIcon({
+  iconName,
+  activeIconName,
+  color,
+  size,
+  focused,
+}: {
+  iconName: MaterialIconName;
+  activeIconName: MaterialIconName;
+  color: string;
+  size: number;
+  focused: boolean;
+}) {
+  const theme = useTheme() as AppTheme;
+  const pillColor = theme.colors.primary + "30";
+  return (
+    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      {focused && (
+        <View
+          style={{
+            position: "absolute",
+            width: 64,
+            height: 32,
+            borderRadius: 16,
+            backgroundColor: pillColor,
+          }}
+        />
+      )}
+      <MaterialCommunityIcons
+        name={focused ? activeIconName : iconName}
+        color={color}
+        size={size}
+      />
+    </View>
+  );
+}
+
 const tabItems: {
   name: string;
   component: React.ComponentType<any>;
   title: string;
   iconName: MaterialIconName;
+  activeIconName: MaterialIconName;
 }[] = [
   {
     name: "Home",
     component: Home,
     title: "Início",
     iconName: "home-outline",
+    activeIconName: "home",
   },
   {
     name: "About",
     component: About,
     title: "Sobre",
     iconName: "information-outline",
+    activeIconName: "information",
   },
 ];
 
@@ -48,10 +90,19 @@ const HomeTabs = createBottomTabNavigator({
         backgroundColor: "transparent",
       },
       headerBackground: () => <HeaderGradient />,
-      headerTintColor: "#FFFFFF",
+      headerTintColor: appTheme.dark ? "#000000" : "#FFFFFF",
       tabBarStyle: {
         backgroundColor: appTheme.colors.tabBar,
         borderTopColor: appTheme.colors.border,
+      },
+      tabBarActiveTintColor: appTheme.colors.primary,
+      tabBarInactiveTintColor: appTheme.colors.text,
+      tabBarIconStyle: {
+        width: 64,
+        height: 32,
+      },
+      tabBarLabelStyle: {
+        marginTop: 4,
       },
     };
   },
@@ -62,11 +113,13 @@ const HomeTabs = createBottomTabNavigator({
         screen: tab.component,
         options: {
           title: tab.title,
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons
-              name={tab.iconName}
+          tabBarIcon: ({ color, size, focused }) => (
+            <TabBarIcon
+              iconName={tab.iconName}
+              activeIconName={tab.activeIconName}
               color={color}
               size={size}
+              focused={focused}
             />
           ),
         },
@@ -84,7 +137,7 @@ const RootStack = createNativeStackNavigator({
         backgroundColor: "transparent",
       },
       headerBackground: () => <HeaderGradient />,
-      headerTintColor: "#FFFFFF",
+      headerTintColor: appTheme.dark ? "#000000" : "#FFFFFF",
       contentStyle: {
         backgroundColor: appTheme.colors.background,
       },
