@@ -14,7 +14,15 @@ export function Home() {
 
   useLayoutEffect(() => {
     if (SHOW_SEARCH) {
-      navigation.setOptions({ headerTitle: () => <HeaderSearchBar /> });
+      navigation.setOptions({
+        headerTitle: () => (
+          <HeaderSearchBar
+            leftIcon={{ icon: "pokeball", onPress: () => {} }}
+            rightIcon={{ icon: "cog-outline", screen: "Settings" }}
+          />
+        ),
+        headerRight: () => null,
+      });
     }
   }, [navigation]);
   return (
