@@ -13,6 +13,7 @@ import { View } from "react-native";
 import type { Theme as AppTheme } from "../themes";
 
 import { HeaderGradient } from "../components/HeaderGradient";
+import { HeaderSearchBar } from "../components/HeaderSearchBar";
 import { Home } from "./screens/Home";
 import { Profile } from "./screens/Profile";
 import { Settings } from "./screens/Settings";
@@ -64,6 +65,7 @@ const tabItems: {
   title: string;
   iconName: MaterialIconName;
   activeIconName: MaterialIconName;
+  headerTitle?: () => React.ReactNode;
 }[] = [
   {
     name: "Home",
@@ -71,6 +73,12 @@ const tabItems: {
     title: "Início",
     iconName: "home-outline",
     activeIconName: "home",
+    headerTitle: () => (
+      <HeaderSearchBar
+        leftIcon={{ icon: "pokeball", onPress: () => {} }}
+        rightIcon={{ icon: "cog-outline", screen: "Settings" }}
+      />
+    ),
   },
   {
     name: "About",
@@ -113,6 +121,9 @@ const HomeTabs = createBottomTabNavigator({
         screen: tab.component,
         options: {
           title: tab.title,
+          ...(tab.headerTitle
+            ? { headerTitle: tab.headerTitle, headerRight: () => null }
+            : {}),
           tabBarIcon: ({ color, size, focused }) => (
             <TabBarIcon
               iconName={tab.iconName}
