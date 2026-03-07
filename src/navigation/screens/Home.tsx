@@ -1,10 +1,22 @@
+import { useLayoutEffect } from "react";
 import { StyleSheet, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { ThemedView } from "../../components/ThemedView";
 import { Text } from "../../components/Text";
 import { Button } from "../../components/Button";
 import { Icon } from "../../components/Icon";
+import { HeaderSearchBar } from "../../components/HeaderSearchBar";
+
+const SHOW_SEARCH = true;
 
 export function Home() {
+  const navigation = useNavigation();
+
+  useLayoutEffect(() => {
+    if (SHOW_SEARCH) {
+      navigation.setOptions({ headerTitle: () => <HeaderSearchBar /> });
+    }
+  }, [navigation]);
   return (
     <ThemedView style={styles.container}>
       <Text>Tela Inicial</Text>
