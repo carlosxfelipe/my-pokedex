@@ -4,14 +4,14 @@ import { fonts } from "./fonts";
 export const DefaultTheme: Theme = {
   dark: false,
   colors: {
-    primary: "#007AFF",
+    primary: "#CC0000",
     background: "#F2F2F2",
     card: "#FFFFFF",
-    header: "#FFFFFF",
+    header: "#CC0000",
     tabBar: "#FFFFFF",
     text: "#1C1C1E",
     border: "#D8D8D8",
-    notification: "#FF3B30",
+    notification: "#CC0000",
   },
   fonts,
 };

@@ -10,6 +10,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import type { ComponentProps } from "react";
 import type { Theme as AppTheme } from "../themes";
 
+import { HeaderGradient } from "../components/HeaderGradient";
 import { Home } from "./screens/Home";
 import { Profile } from "./screens/Profile";
 import { Settings } from "./screens/Settings";
@@ -44,9 +45,10 @@ const HomeTabs = createBottomTabNavigator({
 
     return {
       headerStyle: {
-        backgroundColor: appTheme.colors.header,
+        backgroundColor: "transparent",
       },
-      headerTintColor: appTheme.colors.text,
+      headerBackground: () => <HeaderGradient />,
+      headerTintColor: "#FFFFFF",
       tabBarStyle: {
         backgroundColor: appTheme.colors.tabBar,
         borderTopColor: appTheme.colors.border,
@@ -79,9 +81,10 @@ const RootStack = createNativeStackNavigator({
 
     return {
       headerStyle: {
-        backgroundColor: appTheme.colors.header,
+        backgroundColor: "transparent",
       },
-      headerTintColor: appTheme.colors.text,
+      headerBackground: () => <HeaderGradient />,
+      headerTintColor: "#FFFFFF",
       contentStyle: {
         backgroundColor: appTheme.colors.background,
       },
