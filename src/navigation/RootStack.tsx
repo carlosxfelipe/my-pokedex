@@ -1,14 +1,9 @@
-import {
-  HeaderButton as NavHeaderButton,
-  Text,
-} from "@react-navigation/elements";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Platform } from "react-native";
 import { HeaderButton } from "../components/HeaderButton";
 import { HeaderGradient } from "../components/HeaderGradient";
 import { HomeTabs } from "./HomeTabs";
 import { PokemonDetail } from "./screens/PokemonDetail";
-import { Settings } from "./screens/Settings";
 import { NotFound } from "./screens/NotFound";
 import type { Theme as AppTheme } from "../themes";
 
@@ -34,21 +29,6 @@ export const RootStack = createNativeStackNavigator({
         title: "Início",
         headerShown: false,
       },
-    },
-    Settings: {
-      screen: Settings,
-      options: ({ navigation }: any) => ({
-        presentation: "modal",
-        title: Platform.OS === "android" ? "" : "Configurações",
-        headerTitleAlign: "center",
-        headerLeft: Platform.OS === "android" ? () => null : undefined,
-        headerBackVisible: false,
-        headerRight: () => (
-          <NavHeaderButton onPress={navigation.goBack}>
-            <Text style={{ fontSize: 16 }}>Fechar</Text>
-          </NavHeaderButton>
-        ),
-      }),
     },
     PokemonDetail: {
       screen: PokemonDetail,

@@ -6,6 +6,7 @@ import { HeaderGradient } from "../components/HeaderGradient";
 import { HeaderSearchBar } from "../components/HeaderSearchBar";
 import { Home } from "./screens/Home";
 import { TypeMatchups } from "./screens/TypeMatchups";
+import { Settings } from "./screens/Settings";
 import type { Theme as AppTheme } from "../themes";
 
 export type MaterialCommunityIconName = Extract<
@@ -85,8 +86,8 @@ const tabItems: {
     activeIconName: "home",
     headerTitle: () => (
       <HeaderSearchBar
-        leftIcon={{ icon: "pokeball", onPress: handleCreatorInfo }}
-        rightIcon={{ icon: "cog-outline", screen: "Settings" }}
+        leftIcon={{ icon: "pokeball", onPress: () => {} }}
+        rightIcon={{ icon: "github", onPress: handleCreatorInfo }}
       />
     ),
   },
@@ -96,6 +97,13 @@ const tabItems: {
     title: "Combate",
     iconName: "sword-cross",
     activeIconName: "sword-cross",
+  },
+  {
+    name: "Settings",
+    component: Settings,
+    title: "Ajustes",
+    iconName: "cog-outline",
+    activeIconName: "cog",
   },
 ];
 
@@ -108,6 +116,7 @@ export const HomeTabs = createBottomTabNavigator({
         backgroundColor: "transparent",
       },
       headerBackground: () => <HeaderGradient />,
+      headerTitleAlign: "center",
       headerTintColor: appTheme.dark ? "#000000" : "#FFFFFF",
       tabBarStyle: {
         backgroundColor: appTheme.colors.tabBar,

@@ -9,6 +9,7 @@ import { useTheme } from "@react-navigation/native";
 import { ThemedScrollView } from "../../components/ThemedScrollView";
 import { ThemedStatusBar } from "../../components/ThemedStatusBar";
 import { Text } from "../../components/Text";
+import { ContrastText } from "../../components/ContrastText";
 import { Chip } from "../../components/Chip";
 import { useSettingsStore } from "../../store/useSettingsStore";
 import type { Theme as AppTheme } from "../../themes";
@@ -101,14 +102,14 @@ export function Settings() {
           onPress={() => setTypeFilter("all")}
           activeOpacity={0.8}
         >
-          <Text
-            style={[
-              styles.resetButtonText,
-              { color: typeFilter === "all" ? "#fff" : theme.colors.text },
-            ]}
+          <ContrastText
+            backgroundColor={
+              typeFilter === "all" ? theme.colors.primary : theme.colors.card
+            }
+            style={styles.resetButtonText}
           >
             {typeFilter === "all" ? "✓ Exibindo Todos" : "Limpar Filtro"}
-          </Text>
+          </ContrastText>
         </TouchableOpacity>
 
         <View style={styles.typesGrid}>
