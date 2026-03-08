@@ -73,7 +73,7 @@ export function TypeMatchups() {
       <View style={[styles.card, { backgroundColor: theme.colors.card }]}>
         <View style={{ alignItems: "center", marginBottom: 16 }}>
           <Chip
-            label={`Analisando: ${TYPE_LABELS_PT[selectedType]}`}
+            label={`Analisando Foco: ${TYPE_LABELS_PT[selectedType].toUpperCase()}`}
             color={TYPE_COLORS[selectedType]}
             selected={true}
           />
@@ -90,7 +90,7 @@ export function TypeMatchups() {
             {renderChipList(
               offensive.superEffective,
               "Dano normal em todos.",
-              false,
+              true,
             )}
           </View>
 
@@ -99,13 +99,13 @@ export function TypeMatchups() {
             {renderChipList(
               offensive.notVeryEffective,
               "Nenhum tipo resiste.",
-              false,
+              true,
             )}
           </View>
 
           <View style={styles.combatGroup}>
             <Text style={styles.combatLabel}>Sem Efeito (Dano Zero)</Text>
-            {renderChipList(offensive.noEffect, "Afeta todos os tipos.", false)}
+            {renderChipList(offensive.noEffect, "Afeta todos os tipos.", true)}
           </View>
         </View>
 
@@ -117,11 +117,7 @@ export function TypeMatchups() {
 
           <View style={styles.combatGroup}>
             <Text style={styles.combatLabel}>Fraqueza (Recebe x2)</Text>
-            {renderChipList(
-              defensive.vulnerableTo,
-              "Não tem fraquezas.",
-              false,
-            )}
+            {renderChipList(defensive.vulnerableTo, "Não tem fraquezas.", true)}
           </View>
 
           <View style={styles.combatGroup}>
@@ -129,7 +125,7 @@ export function TypeMatchups() {
             {renderChipList(
               defensive.resistantTo,
               "Nenhuma resistência.",
-              false,
+              true,
             )}
           </View>
 
@@ -138,7 +134,7 @@ export function TypeMatchups() {
             {renderChipList(
               defensive.immuneTo,
               "Sem imunidades nativas.",
-              false,
+              true,
             )}
           </View>
         </View>
@@ -170,24 +166,26 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   card: {
-    padding: 20,
-    borderRadius: 24,
+    padding: 24,
+    borderRadius: 32,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.05,
-    shadowRadius: 12,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.15,
+    shadowRadius: 24,
+    elevation: 8,
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.05)",
   },
   combatSection: {
     marginBottom: 24,
   },
   combatTitle: {
-    fontSize: 18,
-    fontWeight: "800",
-    marginBottom: 16,
+    fontSize: 22,
+    fontWeight: "900",
+    marginBottom: 20,
     borderBottomWidth: 1,
-    borderBottomColor: "rgba(0,0,0,0.05)",
-    paddingBottom: 8,
+    borderBottomColor: "rgba(150,150,150,0.15)",
+    paddingBottom: 12,
   },
   combatGroup: {
     marginBottom: 16,

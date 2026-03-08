@@ -2,6 +2,7 @@ import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useTheme } from "@react-navigation/native";
 import { Icon } from "./Icon";
 import { Text } from "./Text";
+import { ContrastText } from "./ContrastText";
 import {
   TYPE_COLORS_LIGHT,
   TYPE_COLORS_DARK,
@@ -80,14 +81,23 @@ export function PokemonCard({ pokemon, onPress }: PokemonCardProps) {
         </Text>
         <Text style={styles.cardName}>{pokemon.name}</Text>
         <View style={styles.typeTags}>
-          {pokemon.types.map((type) => (
-            <View
-              key={type}
-              style={[styles.typeTag, { backgroundColor: TYPE_COLORS[type] }]}
-            >
-              <Text style={styles.typeTagText}>{TYPE_LABELS_PT[type]}</Text>
-            </View>
-          ))}
+          {pokemon.types.map((type) => {
+            const bgColor = TYPE_COLORS[type];
+
+            return (
+              <View
+                key={type}
+                style={[styles.typeTag, { backgroundColor: bgColor }]}
+              >
+                <ContrastText
+                  backgroundColor={bgColor}
+                  style={styles.typeTagText}
+                >
+                  {TYPE_LABELS_PT[type]}
+                </ContrastText>
+              </View>
+            );
+          })}
         </View>
       </View>
     </TouchableOpacity>
@@ -139,8 +149,7 @@ const styles = StyleSheet.create({
   },
   typeTagText: {
     fontSize: 11,
-    fontWeight: "600",
-    color: "#fff",
+    fontWeight: "700",
   },
   exclusiveBadgesRow: {
     position: "absolute",

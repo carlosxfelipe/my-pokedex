@@ -10,6 +10,7 @@ import { useRoute } from "@react-navigation/native";
 import { useTheme } from "@react-navigation/native";
 import { ThemedView } from "../../components/ThemedView";
 import { Text } from "../../components/Text";
+import { ContrastText } from "../../components/ContrastText";
 import { usePokedexStore } from "../../store/usePokedexStore";
 import { useSettingsStore } from "../../store/useSettingsStore";
 import type { Theme as AppTheme } from "../../themes";
@@ -31,7 +32,12 @@ function MoveRow({ move }: { move: Move }) {
       <View
         style={[styles.moveType, { backgroundColor: TYPE_COLORS[move.type] }]}
       >
-        <Text style={styles.moveTypeText}>{TYPE_LABELS_PT[move.type]}</Text>
+        <ContrastText
+          backgroundColor={TYPE_COLORS[move.type]}
+          style={styles.moveTypeText}
+        >
+          {TYPE_LABELS_PT[move.type]}
+        </ContrastText>
       </View>
       <Text style={styles.moveName}>{move.name}</Text>
       <Text style={styles.moveStat}>{move.power ?? "—"}</Text>
@@ -98,7 +104,12 @@ export function PokemonDetail() {
               key={type}
               style={[styles.typeTag, { backgroundColor: TYPE_COLORS[type] }]}
             >
-              <Text style={styles.typeTagText}>{TYPE_LABELS_PT[type]}</Text>
+              <ContrastText
+                backgroundColor={TYPE_COLORS[type]}
+                style={styles.typeTagText}
+              >
+                {TYPE_LABELS_PT[type]}
+              </ContrastText>
             </View>
           ))}
         </View>
