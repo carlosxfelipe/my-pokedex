@@ -78,38 +78,45 @@ export function mapMoves(
   return moves.sort((a, b) => a.level - b.level);
 }
 
-function extractEvolutions(
-  link: ApiChainLink,
-  spriteMap: Map<number, string | null>,
-): Evolution[] {
-  const result: Evolution[] = [];
-
-  for (const next of link.evolves_to) {
-    const detail = next.evolution_details[0];
-    const trigger = detail?.trigger?.name ?? "other";
-    const nameSlug = next.species.name;
-    const id = extractIdFromUrl(next.species.url);
-
-    result.push({
-      pokemonId: id,
-      pokemonName: nameSlug,
-      spriteUrl: spriteMap.get(id) ?? null,
-      minLevel: detail?.min_level ?? null,
-      trigger: trigger as EvolutionTrigger,
-      item: detail?.item?.name ?? null,
-    });
-
-    result.push(...extractEvolutions(next, spriteMap));
-  }
-
-  return result;
-}
-
 export function mapEvolutionChain(
   chain: ApiChainLink,
   spriteMap: Map<number, string | null>,
 ): Evolution[] {
-  return extractEvolutions(chain, spriteMap);
+  const evolutions: Evolution[] = [];
+
+  // Adiciona o primeiro Pokémon da cadeia (forma base)
+  const rootId = extractIdFromUrl(chain.species.url);
+  evolutions.push({
+    pokemonId: rootId,
+    pokemonName: chain.species.name,
+    spriteUrl: spriteMap.get(rootId) ?? null,
+    minLevel: null,
+    trigger: "level-up",
+    item: null,
+  });
+
+  // Função interna recursiva para percorrer as evoluções seguintes
+  const processChain = (link: ApiChainLink) => {
+    for (const next of link.evolves_to) {
+      const detail = next.evolution_details[0];
+      const trigger = detail?.trigger?.name ?? "other";
+      const id = extractIdFromUrl(next.species.url);
+
+      evolutions.push({
+        pokemonId: id,
+        pokemonName: next.species.name,
+        spriteUrl: spriteMap.get(id) ?? null,
+        minLevel: detail?.min_level ?? null,
+        trigger: trigger as EvolutionTrigger,
+        item: detail?.item?.name ?? null,
+      });
+
+      processChain(next);
+    }
+  };
+
+  processChain(chain);
+  return evolutions;
 }
 
 export function mapPokemon(

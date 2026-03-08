@@ -4,6 +4,7 @@ import {
   View,
   TouchableOpacity,
   Switch,
+  Alert,
 } from "react-native";
 import { useTheme } from "@react-navigation/native";
 import { ThemedScrollView } from "../../components/ThemedScrollView";
@@ -11,7 +12,9 @@ import { ThemedStatusBar } from "../../components/ThemedStatusBar";
 import { Text } from "../../components/Text";
 import { ContrastText } from "../../components/ContrastText";
 import { Chip } from "../../components/Chip";
+import { Button } from "../../components/Button";
 import { useSettingsStore } from "../../store/useSettingsStore";
+import { clearDatabase } from "../../infrastructure/database/PokemonDatabase";
 import type { Theme as AppTheme } from "../../themes";
 import {
   TYPE_LABELS_PT,
@@ -129,14 +132,42 @@ export function Settings() {
           })}
         </View>
       </View>
+
+      {/* SEÇÃO: CACHE */}
+      <View style={[styles.section, { marginTop: 16 }]}>
+        <Text style={styles.sectionTitle}>Armazenamento</Text>
+        <Button
+          variant="tinted"
+          color="#ff4444"
+          onPress={() => {
+            Alert.alert(
+              "Limpar Cache",
+              "Isso removerá todos os Pokémons salvos offline. Você precisará de internet para carregar os detalhes novamente. Continuar?",
+              [
+                { text: "Cancelar", style: "cancel" },
+                {
+                  text: "Limpar Tudo",
+                  style: "destructive",
+                  onPress: async () => {
+                    await clearDatabase();
+                    Alert.alert("Sucesso", "O cache da Pokédex foi limpo!");
+                  },
+                },
+              ],
+            );
+          }}
+        >
+          Limpar Cache da Pokédex
+        </Button>
+      </View>
     </ThemedScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     padding: 24,
+    paddingBottom: 48,
     gap: 32,
   },
   section: {

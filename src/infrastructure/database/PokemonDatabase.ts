@@ -230,3 +230,13 @@ export async function savePokemonDetail(
     }
   });
 }
+
+export async function clearDatabase(): Promise<void> {
+  const db = getDb();
+  await db.execAsync(`
+    DELETE FROM pokemon_summary;
+    DELETE FROM pokemon_moves;
+    DELETE FROM pokemon_evolutions;
+    VACUUM;
+  `);
+}
