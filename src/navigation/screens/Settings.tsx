@@ -44,7 +44,7 @@ export function Settings() {
 
   return (
     <ThemedScrollView contentContainerStyle={styles.container}>
-      {Platform.OS === "android" && <ThemedStatusBar inverted />}
+      <ThemedStatusBar />
       {/* SEÇÃO: IDIOMA */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Idioma dos Dados</Text>

@@ -1,6 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Platform } from "react-native";
-import { HeaderButton } from "../components/HeaderButton";
 import { HeaderGradient } from "../components/HeaderGradient";
 import { HomeTabs } from "./HomeTabs";
 import { PokemonDetail } from "./screens/PokemonDetail";
@@ -14,8 +13,10 @@ export const RootStack = createNativeStackNavigator({
     const appTheme = theme as AppTheme;
 
     return {
+      headerTransparent: false,
       headerStyle: {
-        backgroundColor: "transparent",
+        backgroundColor:
+          Platform.OS === "android" ? appTheme.colors.primary : "transparent",
       },
       headerBackground: () => <HeaderGradient />,
       headerTintColor: appTheme.dark ? "#000000" : "#FFFFFF",
@@ -38,25 +39,9 @@ export const RootStack = createNativeStackNavigator({
         const appTheme = theme as AppTheme;
         const pokemonName = capitalize(route.params?.name ?? "detalhes");
         return {
-          title: Platform.OS === "android" ? "" : pokemonName,
+          title: pokemonName,
           headerTitleAlign: "center",
           headerBackTitleVisible: true,
-          headerLeft:
-            Platform.OS === "android"
-              ? () => (
-                  <HeaderButton
-                    onPress={() =>
-                      navigation.reset({
-                        index: 0,
-                        routes: [
-                          { name: "HomeTabs", params: { screen: "Home" } },
-                        ],
-                      })
-                    }
-                    label="Voltar"
-                  />
-                )
-              : undefined,
         };
       },
     },

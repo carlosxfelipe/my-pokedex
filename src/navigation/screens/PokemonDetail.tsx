@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useNavigation, useRoute, useTheme } from "@react-navigation/native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ThemedView } from "../../components/ThemedView";
 import { ThemedStatusBar } from "../../components/ThemedStatusBar";
 import { Text } from "../../components/Text";
@@ -57,6 +58,7 @@ export function PokemonDetail() {
   const route = useRoute<any>();
   const navigation = useNavigation<any>();
   const { id } = route.params as { id: number };
+  const insets = useSafeAreaInsets();
   const detailKey = String(id);
   const theme = useTheme() as AppTheme;
   const TYPE_COLORS = theme.dark ? TYPE_COLORS_DARK : TYPE_COLORS_LIGHT;
@@ -99,17 +101,19 @@ export function PokemonDetail() {
 
   const p = selectedPokemon;
   const primaryType = p.types[0];
+  const androidHeaderOffset =
+    Platform.OS === "android"
+      ? Math.max(StatusBar.currentHeight ?? 0, insets.top) + 56
+      : 0;
 
   return (
     <ThemedView style={styles.container}>
-      {Platform.OS === "android" && <ThemedStatusBar inverted />}
+      <ThemedStatusBar />
       {/* Header colorido */}
       <View
         style={[
           styles.hero,
-          Platform.OS === "android" && {
-            paddingTop: (StatusBar.currentHeight ?? 0) + 12,
-          },
+          Platform.OS === "android" ? { marginTop: androidHeaderOffset } : null,
           { backgroundColor: TYPE_COLORS[primaryType] + "40" },
         ]}
       >
