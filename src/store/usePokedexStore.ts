@@ -23,7 +23,7 @@ interface PokedexState {
   detailLoading: boolean;
   detailError: string | null;
   // Ações
-  loadList: (language: DataLanguage) => Promise<void>;
+  loadList: (language: DataLanguage, limit: number) => Promise<void>;
   loadDetail: (
     idOrName: number | string,
     version: GameVersion,
@@ -42,10 +42,10 @@ export const usePokedexStore = create<PokedexState>()((set) => ({
   detailLoading: false,
   detailError: null,
 
-  loadList: async (language) => {
+  loadList: async (language, limit) => {
     set({ listLoading: true, listError: null });
     try {
-      const list = await searchUseCase.execute(language);
+      const list = await searchUseCase.execute(language, limit);
       set({ list, listLoading: false });
     } catch (e: any) {
       set({

@@ -5,7 +5,10 @@ import type { DataLanguage } from "../../domain/value-objects/GameVersion";
 export class SearchPokemonUseCase {
   constructor(private readonly repository: IPokemonRepository) {}
 
-  async execute(language: DataLanguage): Promise<PokemonSummary[]> {
-    return this.repository.listKanto(language);
+  async execute(
+    language: DataLanguage,
+    limit: number,
+  ): Promise<PokemonSummary[]> {
+    return this.repository.listPokemons(language, limit);
   }
 }

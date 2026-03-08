@@ -3,9 +3,12 @@ import type { GameVersion, DataLanguage } from "../value-objects/GameVersion";
 
 export interface IPokemonRepository {
   /**
-   * Lista os 151 Pokémon de Kanto com dados básicos.
+   * Lista os Pokémons até o limite definido (Kanto/Hoenn = 386, ou Todos = 1025).
    */
-  listKanto(language: DataLanguage): Promise<PokemonSummary[]>;
+  listPokemons(
+    language: DataLanguage,
+    limit: number,
+  ): Promise<PokemonSummary[]>;
 
   /**
    * Busca o detalhe completo de um Pokémon (moves FRLG + cadeia evolutiva).

@@ -10,14 +10,23 @@
     "scheme": "mypokedex",
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.mypokedex"
+      "bundleIdentifier": "com.mypokedex",
+      "infoPlist": {
+        "NSAppTransportSecurity": {
+          "NSAllowsArbitraryLoads": true
+        }
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.mypokedex"
+      "package": "com.mypokedex",
+      "permissions": [
+        "INTERNET"
+      ],
+      "usesCleartextTraffic": true
     },
     "web": {
       "favicon": "./assets/favicon.png"

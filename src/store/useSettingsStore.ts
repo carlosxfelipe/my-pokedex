@@ -22,9 +22,11 @@ interface SettingsState {
   gameVersion: GameVersion;
   language: DataLanguage;
   typeFilter: PokemonType | "all";
+  showAllGenerations: boolean;
   setGameVersion: (version: GameVersion) => void;
   setLanguage: (language: DataLanguage) => void;
   setTypeFilter: (typeFilter: PokemonType | "all") => void;
+  setShowAllGenerations: (val: boolean) => void;
 }
 
 export const useSettingsStore = create<SettingsState>()(
@@ -33,9 +35,12 @@ export const useSettingsStore = create<SettingsState>()(
       gameVersion: "firered",
       language: "en",
       typeFilter: "all",
+      showAllGenerations: false,
       setGameVersion: (gameVersion) => set({ gameVersion }),
       setLanguage: (language) => set({ language }),
       setTypeFilter: (typeFilter) => set({ typeFilter }),
+      setShowAllGenerations: (showAllGenerations) =>
+        set({ showAllGenerations }),
     }),
     {
       name: "settings",

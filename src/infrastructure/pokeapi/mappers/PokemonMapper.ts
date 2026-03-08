@@ -5,7 +5,10 @@ import type {
 } from "../../../domain/entities/Evolution";
 import type { Move } from "../../../domain/entities/Move";
 import type { PokemonType } from "../../../domain/value-objects/PokemonType";
-import type { DataLanguage } from "../../../domain/value-objects/GameVersion";
+import type {
+  GameVersion,
+  DataLanguage,
+} from "../../../domain/value-objects/GameVersion";
 import type {
   ApiPokemon,
   ApiPokemonSpecies,
@@ -40,16 +43,17 @@ export function mapSummary(
 
 export function mapMoves(
   api: ApiPokemon,
-  version: "firered" | "leafgreen",
+  version: GameVersion,
   moveDetails: Map<string, ApiMoveDetail>,
   language: DataLanguage,
+  targetVersionGroup: string = "firered-leafgreen",
 ): Move[] {
   const moves: Move[] = [];
 
   for (const entry of api.moves) {
     const versionDetail = entry.version_group_details.find(
       (vgd) =>
-        vgd.version_group.name === "firered-leafgreen" &&
+        vgd.version_group.name === targetVersionGroup &&
         vgd.move_learn_method.name === "level-up",
     );
     if (!versionDetail) continue;
@@ -85,9 +89,6 @@ function extractEvolutions(
     const trigger = detail?.trigger?.name ?? "other";
     const nameSlug = next.species.name;
     const id = extractIdFromUrl(next.species.url);
-
-    // Ignora completamente Pokémon que não existem nas Gerações 1-3 (FR/LG)
-    if (id > 386) continue;
 
     result.push({
       pokemonId: id,

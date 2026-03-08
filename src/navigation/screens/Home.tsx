@@ -19,13 +19,15 @@ export function Home() {
   const theme = useTheme() as AppTheme;
   const { list, listLoading, listError, loadList, searchQuery } =
     usePokedexStore();
-  const { language, typeFilter } = useSettingsStore();
+  const { language, typeFilter, showAllGenerations } = useSettingsStore();
+
+  const currentLimit = showAllGenerations ? 1025 : 386;
 
   useEffect(() => {
-    if (list.length === 0) {
-      loadList(language);
+    if (list.length < currentLimit) {
+      loadList(language, currentLimit);
     }
-  }, [language]);
+  }, [language, currentLimit]);
 
   const filtered = useMemo(() => {
     let result = list;
@@ -59,7 +61,7 @@ export function Home() {
     return (
       <ThemedView style={styles.centered}>
         <Text>{listError}</Text>
-        <TouchableOpacity onPress={() => loadList(language)}>
+        <TouchableOpacity onPress={() => loadList(language, currentLimit)}>
           <Text style={{ color: theme.colors.primary }}>Tentar novamente</Text>
         </TouchableOpacity>
       </ThemedView>

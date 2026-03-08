@@ -13,8 +13,14 @@ import {
 import type { PokemonType } from "../../domain/value-objects/PokemonType";
 
 export function Settings() {
-  const { language, setLanguage, typeFilter, setTypeFilter } =
-    useSettingsStore();
+  const {
+    language,
+    setLanguage,
+    typeFilter,
+    setTypeFilter,
+    showAllGenerations,
+    setShowAllGenerations,
+  } = useSettingsStore();
   const theme = useTheme() as AppTheme;
 
   const TYPE_COLORS = theme.dark ? TYPE_COLORS_DARK : TYPE_COLORS_LIGHT;
@@ -41,6 +47,29 @@ export function Settings() {
             <Switch
               value={isSpanish}
               onValueChange={toggleLanguage}
+              trackColor={{ true: theme.colors.primary, false: "#767577" }}
+              thumbColor={"#f4f3f4"}
+              ios_backgroundColor="#3e3e3e"
+            />
+          </View>
+        </View>
+      </View>
+
+      {/* SEÇÃO: GERAÇÕES DA POKÉDEX */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Gerações da Pokédex</Text>
+        <View style={styles.switchRowContainer}>
+          <View style={styles.switchRow}>
+            <View style={styles.switchTextContainer}>
+              <Text style={styles.switchLabel}>Exibir Todas as Gerações</Text>
+              <Text style={styles.switchDescription}>
+                Atenção: Pokémons adicionados aqui podem não existir nos jogos
+                originais FireRed e LeafGreen (Acima do #386).
+              </Text>
+            </View>
+            <Switch
+              value={showAllGenerations}
+              onValueChange={setShowAllGenerations}
               trackColor={{ true: theme.colors.primary, false: "#767577" }}
               thumbColor={"#f4f3f4"}
               ios_backgroundColor="#3e3e3e"
