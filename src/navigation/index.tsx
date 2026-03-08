@@ -19,6 +19,7 @@ import { Profile } from "./screens/Profile";
 import { Settings } from "./screens/Settings";
 import { About } from "./screens/About";
 import { NotFound } from "./screens/NotFound";
+import { PokemonDetail } from "./screens/PokemonDetail";
 
 type MaterialIconName = ComponentProps<typeof MaterialCommunityIcons>["name"];
 
@@ -158,7 +159,7 @@ const RootStack = createNativeStackNavigator({
     HomeTabs: {
       screen: HomeTabs,
       options: {
-        title: "Home",
+        title: "Início",
         headerShown: false,
       },
     },
@@ -180,10 +181,16 @@ const RootStack = createNativeStackNavigator({
         presentation: "modal",
         headerRight: () => (
           <HeaderButton onPress={navigation.goBack}>
-            <Text>Close</Text>
+            <Text>Fechar</Text>
           </HeaderButton>
         ),
       }),
+    },
+    PokemonDetail: {
+      screen: PokemonDetail,
+      options: {
+        title: "Detalhes",
+      },
     },
     NotFound: {
       screen: NotFound,

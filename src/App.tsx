@@ -8,12 +8,15 @@ import { useColorScheme } from "react-native";
 import { Navigation } from "./navigation";
 import { ThemedStatusBar } from "./components/ThemedStatusBar";
 import { DarkTheme, DefaultTheme } from "./themes";
+import { initDatabase } from "./infrastructure/database/PokemonDatabase";
 
 Asset.loadAsync([
   ...NavigationAssets,
   require("./assets/newspaper.png"),
   require("./assets/bell.png"),
 ]);
+
+initDatabase().catch(console.error);
 
 SplashScreen.preventAutoHideAsync();
 
