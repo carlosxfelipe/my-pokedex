@@ -32,6 +32,11 @@ export function Home() {
   const filtered = useMemo(() => {
     let result = list;
 
+    // Respeita o limite do FireRed/LeafGreen (#386)
+    if (!showAllGenerations) {
+      result = result.filter((p) => p.id <= 386);
+    }
+
     if (typeFilter !== "all") {
       result = result.filter((p) => p.types.includes(typeFilter as any));
     }
@@ -46,7 +51,7 @@ export function Home() {
     }
 
     return result;
-  }, [list, searchQuery, typeFilter]);
+  }, [list, searchQuery, typeFilter, showAllGenerations]);
 
   if (listLoading) {
     return (

@@ -138,7 +138,7 @@ export function Settings() {
         <Text style={styles.sectionTitle}>Armazenamento</Text>
         <Button
           variant="tinted"
-          color="#ff4444"
+          shape="rounded"
           onPress={() => {
             Alert.alert(
               "Limpar Cache",

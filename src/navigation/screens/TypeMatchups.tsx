@@ -71,190 +71,104 @@ export function TypeMatchups() {
         </View>
       </View>
 
-      <View style={[styles.card, { backgroundColor: theme.colors.card }]}>
-        <View style={{ alignItems: "center", marginBottom: 16 }}>
-          <Chip
-            label={`Analisando Foco: ${TYPE_LABELS_PT[selectedType].toUpperCase()}`}
-            color={TYPE_COLORS[selectedType]}
-            selected={true}
+      <View style={[styles.mainCard, { backgroundColor: theme.colors.card }]}>
+        <View style={styles.headerIndicator}>
+          <View
+            style={[
+              styles.indicatorPill,
+              { backgroundColor: TYPE_COLORS[selectedType] },
+            ]}
           />
+          <Text style={styles.indicatorText}>
+            ANÁLISE DE TIPO: {TYPE_LABELS_PT[selectedType].toUpperCase()}
+          </Text>
         </View>
 
-        {/* OFENSIVA */}
+        {/* SEÇÃO OFENSIVA */}
         <View style={styles.combatSection}>
-          <View style={styles.combatTitleRow}>
+          <View style={styles.combatHeader}>
             <Icon
               type="MaterialCommunityIcons"
               name="sword-cross"
-              size={24}
-              color={theme.colors.primary}
+              size={18}
+              color={theme.colors.text}
+              style={{ opacity: 0.6 }}
             />
-            <Text style={[styles.combatTitle, { color: theme.colors.primary }]}>
-              Ofensiva (Golpeando)
-            </Text>
+            <Text style={styles.combatHeaderTitle}>EFICÁCIA OFENSIVA</Text>
           </View>
 
-          <View
-            style={[
-              styles.combatGroup,
-              {
-                backgroundColor: theme.dark
-                  ? "rgba(255,255,255,0.03)"
-                  : "rgba(0,0,0,0.03)",
-              },
-            ]}
-          >
-            <View style={styles.combatGroupHeader}>
-              <Icon
-                type="MaterialCommunityIcons"
-                name="chevron-double-up"
-                size={20}
-                color="#4ade80"
-              />
-              <Text style={styles.combatLabel}>Eficaz (Dano x2)</Text>
+          <View style={styles.groupsContainer}>
+            <View style={styles.combatGroup}>
+              <View style={styles.groupHead}>
+                <View style={[styles.dot, { backgroundColor: "#4ade80" }]} />
+                <Text style={styles.groupLabel}>Super Eficaz (x2)</Text>
+              </View>
+              {renderChipList(
+                offensive.superEffective,
+                "Dano normal em todos.",
+              )}
             </View>
-            {renderChipList(
-              offensive.superEffective,
-              "Dano normal em todos.",
-              true,
-            )}
-          </View>
 
-          <View
-            style={[
-              styles.combatGroup,
-              {
-                backgroundColor: theme.dark
-                  ? "rgba(255,255,255,0.03)"
-                  : "rgba(0,0,0,0.03)",
-              },
-            ]}
-          >
-            <View style={styles.combatGroupHeader}>
-              <Icon
-                type="MaterialCommunityIcons"
-                name="chevron-down"
-                size={20}
-                color="#f87171"
-              />
-              <Text style={styles.combatLabel}>Pouco Eficaz (Dano x0.5)</Text>
+            <View style={styles.combatGroup}>
+              <View style={styles.groupHead}>
+                <View style={[styles.dot, { backgroundColor: "#f87171" }]} />
+                <Text style={styles.groupLabel}>Não muito Eficaz (x0.5)</Text>
+              </View>
+              {renderChipList(
+                offensive.notVeryEffective,
+                "Dano normal em todos.",
+              )}
             </View>
-            {renderChipList(
-              offensive.notVeryEffective,
-              "Nenhum tipo resiste.",
-              true,
-            )}
-          </View>
 
-          <View
-            style={[
-              styles.combatGroup,
-              {
-                backgroundColor: theme.dark
-                  ? "rgba(255,255,255,0.03)"
-                  : "rgba(0,0,0,0.03)",
-              },
-            ]}
-          >
-            <View style={styles.combatGroupHeader}>
-              <Icon
-                type="MaterialCommunityIcons"
-                name="close-circle-outline"
-                size={20}
-                color="#9ca3af"
-              />
-              <Text style={styles.combatLabel}>Sem Efeito (Dano Zero)</Text>
+            <View style={styles.combatGroup}>
+              <View style={styles.groupHead}>
+                <View style={[styles.dot, { backgroundColor: "#9ca3af" }]} />
+                <Text style={styles.groupLabel}>Sem Efeito (x0)</Text>
+              </View>
+              {renderChipList(offensive.noEffect, "Afeta todos os tipos.")}
             </View>
-            {renderChipList(offensive.noEffect, "Afeta todos os tipos.", true)}
           </View>
         </View>
 
-        {/* DEFENSIVA */}
-        <View style={styles.combatSection}>
-          <View style={styles.combatTitleRow}>
+        {/* SEÇÃO DEFENSIVA */}
+        <View style={[styles.combatSection, { marginTop: 12 }]}>
+          <View style={styles.combatHeader}>
             <Icon
               type="MaterialCommunityIcons"
               name="shield-half-full"
-              size={24}
-              color="#3B82F6"
+              size={18}
+              color={theme.colors.text}
+              style={{ opacity: 0.6 }}
             />
-            <Text style={[styles.combatTitle, { color: "#3B82F6" }]}>
-              Defensiva (Recebendo)
-            </Text>
+            <Text style={styles.combatHeaderTitle}>RESISTÊNCIA DEFENSIVA</Text>
           </View>
 
-          <View
-            style={[
-              styles.combatGroup,
-              {
-                backgroundColor: theme.dark
-                  ? "rgba(255,255,255,0.03)"
-                  : "rgba(0,0,0,0.03)",
-              },
-            ]}
-          >
-            <View style={styles.combatGroupHeader}>
-              <Icon
-                type="MaterialCommunityIcons"
-                name="alert-circle-outline"
-                size={20}
-                color="#f87171"
-              />
-              <Text style={styles.combatLabel}>Fraqueza (Recebe x2)</Text>
+          <View style={styles.groupsContainer}>
+            <View style={styles.combatGroup}>
+              <View style={styles.groupHead}>
+                <View style={[styles.dot, { backgroundColor: "#f87171" }]} />
+                <Text style={styles.groupLabel}>Fraqueza (Recebe x2)</Text>
+              </View>
+              {renderChipList(defensive.vulnerableTo, "Não possui fraquezas.")}
             </View>
-            {renderChipList(defensive.vulnerableTo, "Não tem fraquezas.", true)}
-          </View>
 
-          <View
-            style={[
-              styles.combatGroup,
-              {
-                backgroundColor: theme.dark
-                  ? "rgba(255,255,255,0.03)"
-                  : "rgba(0,0,0,0.03)",
-              },
-            ]}
-          >
-            <View style={styles.combatGroupHeader}>
-              <Icon
-                type="MaterialCommunityIcons"
-                name="shield-check-outline"
-                size={20}
-                color="#4ade80"
-              />
-              <Text style={styles.combatLabel}>Resistência (Recebe x0.5)</Text>
+            <View style={styles.combatGroup}>
+              <View style={styles.groupHead}>
+                <View style={[styles.dot, { backgroundColor: "#4ade80" }]} />
+                <Text style={styles.groupLabel}>
+                  Resistente a (Recebe x0.5)
+                </Text>
+              </View>
+              {renderChipList(defensive.resistantTo, "Nenhuma resistência.")}
             </View>
-            {renderChipList(
-              defensive.resistantTo,
-              "Nenhuma resistência.",
-              true,
-            )}
-          </View>
 
-          <View
-            style={[
-              styles.combatGroup,
-              {
-                backgroundColor: theme.dark
-                  ? "rgba(255,255,255,0.03)"
-                  : "rgba(0,0,0,0.03)",
-              },
-            ]}
-          >
-            <View style={styles.combatGroupHeader}>
-              <Icon
-                type="MaterialCommunityIcons"
-                name="shield-star-outline"
-                size={20}
-                color="#a78bfa"
-              />
-              <Text style={styles.combatLabel}>Imunidades (Zero Dano)</Text>
+            <View style={styles.combatGroup}>
+              <View style={styles.groupHead}>
+                <View style={[styles.dot, { backgroundColor: "#a78bfa" }]} />
+                <Text style={styles.groupLabel}>Imunidades (Zero Dano)</Text>
+              </View>
+              {renderChipList(defensive.immuneTo, "Sem imunidades nativas.")}
             </View>
-            {renderChipList(
-              defensive.immuneTo,
-              "Sem imunidades nativas.",
-              true,
-            )}
           </View>
         </View>
       </View>
@@ -264,70 +178,92 @@ export function TypeMatchups() {
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
-    padding: 24,
-    gap: 32,
+    padding: 20,
+    gap: 24,
     paddingBottom: 40,
   },
   section: {
     gap: 16,
   },
   sectionTitle: {
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: "700",
     textTransform: "uppercase",
-    letterSpacing: 1.2,
+    letterSpacing: 1,
     opacity: 0.5,
+    marginLeft: 4,
   },
   typesGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
+    gap: 8,
+  },
+  mainCard: {
+    borderRadius: 24,
+    padding: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    elevation: 4,
+    overflow: "hidden",
+  },
+  headerIndicator: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 28,
     gap: 10,
   },
-  card: {
-    padding: 24,
-    borderRadius: 32,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.15,
-    shadowRadius: 24,
-    elevation: 8,
-    borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.05)",
+  indicatorPill: {
+    width: 6,
+    height: 18,
+    borderRadius: 3,
+  },
+  indicatorText: {
+    fontSize: 14,
+    fontWeight: "800",
+    letterSpacing: 0.5,
+    opacity: 0.8,
   },
   combatSection: {
-    marginBottom: 24,
+    gap: 16,
   },
-  combatTitleRow: {
+  combatHeader: {
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
-    marginBottom: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: "rgba(150,150,150,0.15)",
-    paddingBottom: 12,
+    paddingBottom: 10,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: "rgba(150,150,150,0.2)",
   },
-  combatTitle: {
-    fontSize: 22,
-    fontWeight: "900",
+  combatHeaderTitle: {
+    fontSize: 13,
+    fontWeight: "700",
+    letterSpacing: 0.8,
+    opacity: 0.6,
+  },
+  groupsContainer: {
+    gap: 16,
+    paddingLeft: 4,
   },
   combatGroup: {
-    marginBottom: 16,
-    padding: 16,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: "rgba(150,150,150,0.1)",
+    gap: 10,
   },
-  combatGroupHeader: {
+  groupHead: {
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
-    marginBottom: 12,
   },
-  combatLabel: {
-    fontSize: 15,
-    fontWeight: "800",
-    opacity: 0.9,
+  dot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+  },
+  groupLabel: {
+    fontSize: 12,
+    fontWeight: "700",
+    opacity: 0.4,
+    textTransform: "uppercase",
   },
   chipRow: {
     flexDirection: "row",
@@ -335,8 +271,9 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   emptyText: {
-    fontSize: 14,
-    opacity: 0.4,
+    fontSize: 13,
+    opacity: 0.3,
     fontStyle: "italic",
+    paddingLeft: 14,
   },
 });
