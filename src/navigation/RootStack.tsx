@@ -7,6 +7,8 @@ import { PokemonDetail } from "./screens/PokemonDetail";
 import { NotFound } from "./screens/NotFound";
 import type { Theme as AppTheme } from "../themes";
 
+import { capitalize } from "../utils/stringUtils";
+
 export const RootStack = createNativeStackNavigator({
   screenOptions: ({ theme }) => {
     const appTheme = theme as AppTheme;
@@ -34,7 +36,7 @@ export const RootStack = createNativeStackNavigator({
       screen: PokemonDetail,
       options: ({ navigation, route, theme }: any) => {
         const appTheme = theme as AppTheme;
-        const pokemonName = route.params?.name ?? "Detalhes";
+        const pokemonName = capitalize(route.params?.name ?? "detalhes");
         return {
           title: pokemonName,
           headerTitleAlign: "center",

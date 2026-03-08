@@ -23,6 +23,7 @@ import {
   TYPE_COLORS_DARK,
   TYPE_LABELS_PT,
 } from "../../utils/pokemonTypes";
+import { capitalize } from "../../utils/stringUtils";
 
 function MoveRow({ move }: { move: Move }) {
   const theme = useTheme() as AppTheme;
@@ -147,7 +148,7 @@ export function PokemonDetail() {
                     onPress={() =>
                       navigation.push("PokemonDetail", {
                         id: evo.fromId,
-                        name: evo.fromName,
+                        name: capitalize(evo.fromName),
                       })
                     }
                   >
@@ -190,7 +191,7 @@ export function PokemonDetail() {
                     onPress={() =>
                       navigation.push("PokemonDetail", {
                         id: evo.toId,
-                        name: evo.toName,
+                        name: capitalize(evo.toName),
                       })
                     }
                   >

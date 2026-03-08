@@ -13,6 +13,7 @@ import { usePokedexStore } from "../../store/usePokedexStore";
 import { useSettingsStore } from "../../store/useSettingsStore";
 import type { Theme as AppTheme } from "../../themes";
 import { PokemonCard } from "../../components/PokemonCard";
+import { capitalize } from "../../utils/stringUtils";
 
 export function Home() {
   const navigation = useNavigation<any>();
@@ -87,7 +88,7 @@ export function Home() {
             onPress={() => {
               navigation.navigate("PokemonDetail", {
                 id: item.id,
-                name: item.name,
+                name: capitalize(item.name),
               });
             }}
           />
