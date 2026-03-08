@@ -15,7 +15,6 @@ import type { Theme as AppTheme } from "../themes";
 import { HeaderGradient } from "../components/HeaderGradient";
 import { HeaderSearchBar } from "../components/HeaderSearchBar";
 import { Home } from "./screens/Home";
-import { Profile } from "./screens/Profile";
 import { Settings } from "./screens/Settings";
 import { About } from "./screens/About";
 import { NotFound } from "./screens/NotFound";
@@ -163,21 +162,9 @@ const RootStack = createNativeStackNavigator({
         headerShown: false,
       },
     },
-    Profile: {
-      screen: Profile,
-      linking: {
-        path: ":user(@[a-zA-Z0-9-_]+)",
-        parse: {
-          user: (value) => value.replace(/^@/, ""),
-        },
-        stringify: {
-          user: (value) => `@${value}`,
-        },
-      },
-    },
     Settings: {
       screen: Settings,
-      options: ({ navigation }) => ({
+      options: ({ navigation }: any) => ({
         presentation: "modal",
         headerRight: () => (
           <HeaderButton onPress={navigation.goBack}>

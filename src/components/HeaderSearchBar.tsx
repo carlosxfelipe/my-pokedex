@@ -23,12 +23,14 @@ interface Props {
   rightIcon?: HeaderIcon;
 }
 
+import { usePokedexStore } from "../store/usePokedexStore";
+
 const HEADER_H_PADDING = 16;
 const ICON_SIZE = 32;
 const GAP = 12;
 
 export function HeaderSearchBar({ leftIcon, rightIcon }: Props) {
-  const [query, setQuery] = useState("");
+  const { searchQuery: query, setSearchQuery: setQuery } = usePokedexStore();
   const { dark } = useTheme();
   const navigation = useNavigation();
   const { width: screenWidth } = useWindowDimensions();

@@ -17,6 +17,7 @@ interface PokedexState {
   list: PokemonSummary[];
   listLoading: boolean;
   listError: string | null;
+  searchQuery: string;
   // Detalhe
   selectedPokemon: Pokemon | null;
   detailLoading: boolean;
@@ -29,12 +30,14 @@ interface PokedexState {
     language: DataLanguage,
   ) => Promise<void>;
   clearDetail: () => void;
+  setSearchQuery: (query: string) => void;
 }
 
 export const usePokedexStore = create<PokedexState>()((set) => ({
   list: [],
   listLoading: false,
   listError: null,
+  searchQuery: "",
   selectedPokemon: null,
   detailLoading: false,
   detailError: null,
@@ -66,4 +69,5 @@ export const usePokedexStore = create<PokedexState>()((set) => ({
   },
 
   clearDetail: () => set({ selectedPokemon: null }),
+  setSearchQuery: (query) => set({ searchQuery: query }),
 }));

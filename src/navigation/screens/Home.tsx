@@ -17,10 +17,9 @@ import { PokemonCard } from "../../components/PokemonCard";
 export function Home() {
   const navigation = useNavigation<any>();
   const theme = useTheme() as AppTheme;
-  const { list, listLoading, listError, loadList } = usePokedexStore();
+  const { list, listLoading, listError, loadList, searchQuery } =
+    usePokedexStore();
   const { language, typeFilter } = useSettingsStore();
-
-  const [query, setQuery] = useState("");
 
   useEffect(() => {
     if (list.length === 0) {
@@ -35,8 +34,8 @@ export function Home() {
       result = result.filter((p) => p.types.includes(typeFilter as any));
     }
 
-    if (query.trim()) {
-      const q = query.toLowerCase();
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
       result = result.filter(
         (p) =>
           p.name.toLowerCase().includes(q) ||
@@ -45,7 +44,7 @@ export function Home() {
     }
 
     return result;
-  }, [list, query, typeFilter]);
+  }, [list, searchQuery, typeFilter]);
 
   if (listLoading) {
     return (
