@@ -19,7 +19,9 @@ Para executar esta aplicação em seu ambiente local, siga os passos abaixo:
    ```bash
    # Para iOS
    npm run ios
+   ```
 
+   ```bash
    # Para Android
    npm run android
    ```

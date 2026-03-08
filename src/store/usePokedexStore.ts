@@ -19,9 +19,9 @@ interface PokedexState {
   listError: string | null;
   searchQuery: string;
   // Detalhe
-  selectedPokemon: Pokemon | null;
-  detailLoading: boolean;
-  detailError: string | null;
+  detailById: Record<string, Pokemon>;
+  detailLoadingById: Record<string, boolean>;
+  detailErrorById: Record<string, string | null>;
   // Ações
   loadList: (language: DataLanguage, limit: number) => Promise<void>;
   loadDetail: (
@@ -38,9 +38,9 @@ export const usePokedexStore = create<PokedexState>()((set) => ({
   listLoading: false,
   listError: null,
   searchQuery: "",
-  selectedPokemon: null,
-  detailLoading: false,
-  detailError: null,
+  detailById: {},
+  detailLoadingById: {},
+  detailErrorById: {},
 
   loadList: async (language, limit) => {
     set({ listLoading: true, listError: null });
@@ -56,18 +56,30 @@ export const usePokedexStore = create<PokedexState>()((set) => ({
   },
 
   loadDetail: async (idOrName, version, language) => {
-    set({ detailLoading: true, detailError: null, selectedPokemon: null });
+    const detailKey = String(idOrName);
+    set((state) => ({
+      detailLoadingById: { ...state.detailLoadingById, [detailKey]: true },
+      detailErrorById: { ...state.detailErrorById, [detailKey]: null },
+    }));
     try {
       const pokemon = await detailUseCase.execute(idOrName, version, language);
-      set({ selectedPokemon: pokemon, detailLoading: false });
+      const pokemonKey = String(pokemon.id);
+      set((state) => ({
+        detailById: { ...state.detailById, [pokemonKey]: pokemon },
+        detailLoadingById: { ...state.detailLoadingById, [detailKey]: false },
+      }));
     } catch (e: any) {
-      set({
-        detailLoading: false,
-        detailError: e.message ?? "Erro ao carregar Pokémon",
-      });
+      set((state) => ({
+        detailLoadingById: { ...state.detailLoadingById, [detailKey]: false },
+        detailErrorById: {
+          ...state.detailErrorById,
+          [detailKey]: e.message ?? "Erro ao carregar Pokémon",
+        },
+      }));
     }
   },
 
-  clearDetail: () => set({ selectedPokemon: null }),
+  clearDetail: () =>
+    set({ detailById: {}, detailLoadingById: {}, detailErrorById: {} }),
   setSearchQuery: (query) => set({ searchQuery: query }),
 }));

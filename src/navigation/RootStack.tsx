@@ -38,14 +38,21 @@ export const RootStack = createNativeStackNavigator({
         const appTheme = theme as AppTheme;
         const pokemonName = capitalize(route.params?.name ?? "detalhes");
         return {
-          title: pokemonName,
+          title: Platform.OS === "android" ? "" : pokemonName,
           headerTitleAlign: "center",
           headerBackTitleVisible: true,
           headerLeft:
             Platform.OS === "android"
               ? () => (
                   <HeaderButton
-                    onPress={() => navigation.goBack()}
+                    onPress={() =>
+                      navigation.reset({
+                        index: 0,
+                        routes: [
+                          { name: "HomeTabs", params: { screen: "Home" } },
+                        ],
+                      })
+                    }
                     label="Voltar"
                   />
                 )

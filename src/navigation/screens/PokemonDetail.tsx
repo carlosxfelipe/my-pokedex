@@ -3,6 +3,7 @@ import {
   ActivityIndicator,
   Image,
   Platform,
+  StatusBar,
   ScrollView,
   StyleSheet,
   View,
@@ -56,11 +57,16 @@ export function PokemonDetail() {
   const route = useRoute<any>();
   const navigation = useNavigation<any>();
   const { id } = route.params as { id: number };
+  const detailKey = String(id);
   const theme = useTheme() as AppTheme;
   const TYPE_COLORS = theme.dark ? TYPE_COLORS_DARK : TYPE_COLORS_LIGHT;
-  const { selectedPokemon, detailLoading, detailError, loadDetail } =
+  const { detailById, detailLoadingById, detailErrorById, loadDetail } =
     usePokedexStore();
   const { gameVersion, language, showAllGenerations } = useSettingsStore();
+
+  const selectedPokemon = detailById[detailKey] ?? null;
+  const detailLoading = detailLoadingById[detailKey] ?? false;
+  const detailError = detailErrorById[detailKey] ?? null;
 
   useEffect(() => {
     loadDetail(id, gameVersion, language);
@@ -101,6 +107,9 @@ export function PokemonDetail() {
       <View
         style={[
           styles.hero,
+          Platform.OS === "android" && {
+            paddingTop: (StatusBar.currentHeight ?? 0) + 12,
+          },
           { backgroundColor: TYPE_COLORS[primaryType] + "40" },
         ]}
       >
