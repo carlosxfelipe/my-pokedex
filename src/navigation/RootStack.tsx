@@ -26,18 +26,19 @@ export const RootStack = createNativeStackNavigator({
     HomeTabs: {
       screen: HomeTabs,
       options: {
-        title: "Início",
+        title: "Pokédex",
         headerShown: false,
       },
     },
     PokemonDetail: {
       screen: PokemonDetail,
-      options: ({ navigation, theme }: any) => {
+      options: ({ navigation, route, theme }: any) => {
         const appTheme = theme as AppTheme;
-        const color = appTheme.dark ? "#000000" : "#FFFFFF";
+        const pokemonName = route.params?.name ?? "Detalhes";
         return {
-          title: Platform.OS === "android" ? "" : "Detalhes",
-          headerTitleAlign: Platform.OS === "android" ? "center" : undefined,
+          title: pokemonName,
+          headerTitleAlign: "center",
+          headerBackTitleVisible: true,
           headerLeft:
             Platform.OS === "android"
               ? () => (

@@ -85,7 +85,10 @@ export function Home() {
           <PokemonCard
             pokemon={item}
             onPress={() => {
-              navigation.navigate("PokemonDetail", { id: item.id });
+              navigation.navigate("PokemonDetail", {
+                id: item.id,
+                name: item.name,
+              });
             }}
           />
         )}

@@ -84,30 +84,24 @@ export function mapEvolutionChain(
 ): Evolution[] {
   const evolutions: Evolution[] = [];
 
-  // Adiciona o primeiro Pokémon da cadeia (forma base)
-  const rootId = extractIdFromUrl(chain.species.url);
-  evolutions.push({
-    pokemonId: rootId,
-    pokemonName: chain.species.name,
-    spriteUrl: spriteMap.get(rootId) ?? null,
-    minLevel: null,
-    trigger: "level-up",
-    item: null,
-  });
-
-  // Função interna recursiva para percorrer as evoluções seguintes
+  // Função interna recursiva para percorrer os elos (links) da cadeia
   const processChain = (link: ApiChainLink) => {
+    const fromId = extractIdFromUrl(link.species.url);
+
     for (const next of link.evolves_to) {
       const detail = next.evolution_details[0];
-      const trigger = detail?.trigger?.name ?? "other";
-      const id = extractIdFromUrl(next.species.url);
+      const trigger = (detail?.trigger?.name ?? "other") as EvolutionTrigger;
+      const toId = extractIdFromUrl(next.species.url);
 
       evolutions.push({
-        pokemonId: id,
-        pokemonName: next.species.name,
-        spriteUrl: spriteMap.get(id) ?? null,
+        fromId,
+        fromName: link.species.name,
+        fromSpriteUrl: spriteMap.get(fromId) ?? null,
+        toId,
+        toName: next.species.name,
+        toSpriteUrl: spriteMap.get(toId) ?? null,
         minLevel: detail?.min_level ?? null,
-        trigger: trigger as EvolutionTrigger,
+        trigger,
         item: detail?.item?.name ?? null,
       });
 

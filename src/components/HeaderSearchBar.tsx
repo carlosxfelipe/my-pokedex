@@ -85,6 +85,17 @@ export function HeaderSearchBar({ leftIcon, rightIcon }: Props) {
           autoCorrect={false}
           autoCapitalize="none"
         />
+        {query.length > 0 && (
+          <TouchableOpacity onPress={() => setQuery("")} hitSlop={10}>
+            <Icon
+              type="MaterialCommunityIcons"
+              name="close-circle"
+              size={18}
+              color={textColor}
+              style={{ opacity: 0.5 }}
+            />
+          </TouchableOpacity>
+        )}
       </View>
       <Slot item={rightIcon} />
     </View>

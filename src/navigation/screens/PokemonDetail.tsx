@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import {
   ActivityIndicator,
   Image,
@@ -6,13 +6,14 @@ import {
   ScrollView,
   StyleSheet,
   View,
+  TouchableOpacity,
 } from "react-native";
-import { useRoute } from "@react-navigation/native";
-import { useTheme } from "@react-navigation/native";
+import { useNavigation, useRoute, useTheme } from "@react-navigation/native";
 import { ThemedView } from "../../components/ThemedView";
 import { ThemedStatusBar } from "../../components/ThemedStatusBar";
 import { Text } from "../../components/Text";
 import { ContrastText } from "../../components/ContrastText";
+import { Icon } from "../../components/Icon";
 import { usePokedexStore } from "../../store/usePokedexStore";
 import { useSettingsStore } from "../../store/useSettingsStore";
 import type { Theme as AppTheme } from "../../themes";
@@ -52,16 +53,26 @@ function MoveRow({ move }: { move: Move }) {
 
 export function PokemonDetail() {
   const route = useRoute<any>();
+  const navigation = useNavigation<any>();
   const { id } = route.params as { id: number };
   const theme = useTheme() as AppTheme;
   const TYPE_COLORS = theme.dark ? TYPE_COLORS_DARK : TYPE_COLORS_LIGHT;
   const { selectedPokemon, detailLoading, detailError, loadDetail } =
     usePokedexStore();
-  const { gameVersion, language } = useSettingsStore();
+  const { gameVersion, language, showAllGenerations } = useSettingsStore();
 
   useEffect(() => {
     loadDetail(id, gameVersion, language);
   }, [id, gameVersion, language]);
+
+  const filteredEvoChain = useMemo(() => {
+    if (!selectedPokemon) return [];
+    if (showAllGenerations) return selectedPokemon.evolutionChain;
+    // Se o modo "Todas as Gerações" estiver desligado, filtra evoluções fora do limite 386 (FR/LG)
+    return selectedPokemon.evolutionChain.filter(
+      (evo) => evo.fromId <= 386 && evo.toId <= 386,
+    );
+  }, [selectedPokemon, showAllGenerations]);
 
   if (detailLoading) {
     return (
@@ -120,35 +131,81 @@ export function PokemonDetail() {
 
       <ScrollView contentContainerStyle={styles.content}>
         {/* Evoluções */}
-        {p.evolutionChain.length > 0 && (
+        {filteredEvoChain.length > 0 && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Evoluções</Text>
-            <View style={styles.evoChain}>
-              {p.evolutionChain.map((evo, i) => (
-                <React.Fragment key={evo.pokemonId}>
-                  {i > 0 && (
-                    <View style={styles.evoArrowContainer}>
-                      <Text style={styles.evoArrow}>
-                        {evo.minLevel
-                          ? `Lv ${evo.minLevel}`
-                          : (evo.item ?? evo.trigger)}
-                        {"\n→"}
-                      </Text>
-                    </View>
-                  )}
-                  <View style={styles.evoItem}>
-                    {evo.spriteUrl ? (
+            <View style={styles.evoContainer}>
+              {filteredEvoChain.map((evo, idx) => (
+                <View
+                  key={`${evo.fromId}-${evo.toId}-${idx}`}
+                  style={styles.evoLinkRow}
+                >
+                  {/* ORIGEM */}
+                  <TouchableOpacity
+                    style={styles.evoMember}
+                    activeOpacity={0.7}
+                    onPress={() =>
+                      navigation.push("PokemonDetail", {
+                        id: evo.fromId,
+                        name: evo.fromName,
+                      })
+                    }
+                  >
+                    {evo.fromSpriteUrl ? (
                       <Image
-                        source={{ uri: evo.spriteUrl }}
+                        source={{ uri: evo.fromSpriteUrl }}
                         style={styles.evoSprite}
                         resizeMode="contain"
                       />
                     ) : null}
                     <Text style={styles.evoName} numberOfLines={1}>
-                      {evo.pokemonName}
+                      {evo.fromName}
                     </Text>
+                  </TouchableOpacity>
+
+                  {/* CONEXÃO / MÉTODO */}
+                  <View style={styles.evoConnection}>
+                    <Text style={styles.evoMethodText}>
+                      {evo.minLevel
+                        ? `Lv ${evo.minLevel}`
+                        : evo.item
+                          ? evo.item.replace(/-/g, " ")
+                          : evo.trigger === "trade"
+                            ? "Troca"
+                            : "→"}
+                    </Text>
+                    <Icon
+                      type="MaterialCommunityIcons"
+                      name="arrow-right"
+                      size={20}
+                      color={theme.colors.text}
+                      style={{ opacity: 0.2 }}
+                    />
                   </View>
-                </React.Fragment>
+
+                  {/* DESTINO */}
+                  <TouchableOpacity
+                    style={styles.evoMember}
+                    activeOpacity={0.7}
+                    onPress={() =>
+                      navigation.push("PokemonDetail", {
+                        id: evo.toId,
+                        name: evo.toName,
+                      })
+                    }
+                  >
+                    {evo.toSpriteUrl ? (
+                      <Image
+                        source={{ uri: evo.toSpriteUrl }}
+                        style={styles.evoSprite}
+                        resizeMode="contain"
+                      />
+                    ) : null}
+                    <Text style={styles.evoName} numberOfLines={1}>
+                      {evo.toName}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               ))}
             </View>
           </View>
@@ -220,21 +277,45 @@ const styles = StyleSheet.create({
     letterSpacing: 0.8,
     opacity: 0.5,
   },
-  evoChain: {
+  evoContainer: {
+    paddingTop: 8,
+  },
+  evoLinkRow: {
     flexDirection: "row",
     alignItems: "center",
-    flexWrap: "wrap",
-    gap: 8,
+    justifyContent: "space-between",
+    paddingVertical: 12,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: "rgba(150,150,150,0.1)",
   },
-  evoItem: { alignItems: "center", gap: 4, minWidth: 72 },
-  evoArrowContainer: { paddingBottom: 24, paddingHorizontal: 4 },
-  evoArrow: { fontSize: 11, textAlign: "center", opacity: 0.6 },
-  evoSprite: { width: 72, height: 72 },
+  evoMember: {
+    alignItems: "center",
+    gap: 4,
+    flex: 1,
+  },
+  evoConnection: {
+    alignItems: "center",
+    gap: 2,
+    paddingHorizontal: 8,
+    minWidth: 80,
+  },
+  evoMethodText: {
+    fontSize: 10,
+    fontWeight: "800",
+    opacity: 0.4,
+    textTransform: "uppercase",
+    textAlign: "center",
+  },
+  evoSprite: {
+    width: 64,
+    height: 64,
+  },
   evoName: {
     fontSize: 12,
-    fontWeight: "600",
+    fontWeight: "700",
     textTransform: "capitalize",
     textAlign: "center",
+    opacity: 0.8,
   },
   moveRow: {
     flexDirection: "row",

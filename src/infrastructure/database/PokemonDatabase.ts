@@ -4,7 +4,7 @@ import type { Move } from "../../domain/entities/Move";
 import type { Evolution } from "../../domain/entities/Evolution";
 import type { PokemonType } from "../../domain/value-objects/PokemonType";
 
-const DB_NAME = "pokedex_v2.db";
+const DB_NAME = "pokedex_v3.db";
 
 let _db: SQLite.SQLiteDatabase | null = null;
 
@@ -43,16 +43,19 @@ export async function initDatabase(): Promise<void> {
     );
 
     CREATE TABLE IF NOT EXISTS pokemon_evolutions (
-      source_id   INTEGER NOT NULL,
-      pokemon_id  INTEGER NOT NULL,
-      language    TEXT    NOT NULL,
-      pokemon_name TEXT   NOT NULL,
-      sprite_url  TEXT,
-      min_level   INTEGER,
-      trigger     TEXT    NOT NULL,
-      item        TEXT,
-      sort_order  INTEGER NOT NULL,
-      PRIMARY KEY (source_id, pokemon_id, language)
+      source_id     INTEGER NOT NULL,
+      from_id       INTEGER NOT NULL,
+      from_name     TEXT    NOT NULL,
+      from_sprite   TEXT,
+      to_id         INTEGER NOT NULL,
+      to_name       TEXT    NOT NULL,
+      to_sprite     TEXT,
+      language      TEXT    NOT NULL,
+      min_level     INTEGER,
+      trigger       TEXT    NOT NULL,
+      item          TEXT,
+      sort_order    INTEGER NOT NULL,
+      PRIMARY KEY (source_id, from_id, to_id, language)
     );
   `);
 }
@@ -132,14 +135,17 @@ export async function getPokemonDetail(
   );
 
   const evoRows = await db.getAllAsync<{
-    pokemon_id: number;
-    pokemon_name: string;
-    sprite_url: string | null;
+    from_id: number;
+    from_name: string;
+    from_sprite: string | null;
+    to_id: number;
+    to_name: string;
+    to_sprite: string | null;
     min_level: number | null;
     trigger: string;
     item: string | null;
   }>(
-    `SELECT pokemon_id, pokemon_name, sprite_url, min_level, trigger, item
+    `SELECT from_id, from_name, from_sprite, to_id, to_name, to_sprite, min_level, trigger, item
      FROM pokemon_evolutions WHERE source_id = ? AND language = ? ORDER BY sort_order`,
     [id, language],
   );
@@ -158,9 +164,12 @@ export async function getPokemonDetail(
       category: m.category as Move["category"],
     })),
     evolutionChain: evoRows.map((e) => ({
-      pokemonId: e.pokemon_id,
-      pokemonName: e.pokemon_name,
-      spriteUrl: e.sprite_url,
+      fromId: e.from_id,
+      fromName: e.from_name,
+      fromSpriteUrl: e.from_sprite,
+      toId: e.to_id,
+      toName: e.to_name,
+      toSpriteUrl: e.to_sprite,
       minLevel: e.min_level,
       trigger: e.trigger as Evolution["trigger"],
       item: e.item,
@@ -213,14 +222,17 @@ export async function savePokemonDetail(
       const e = pokemon.evolutionChain[i];
       await db.runAsync(
         `INSERT OR REPLACE INTO pokemon_evolutions
-           (source_id, pokemon_id, language, pokemon_name, sprite_url, min_level, trigger, item, sort_order)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+           (source_id, from_id, from_name, from_sprite, to_id, to_name, to_sprite, language, min_level, trigger, item, sort_order)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           pokemon.id,
-          e.pokemonId,
+          e.fromId,
+          e.fromName,
+          e.fromSpriteUrl,
+          e.toId,
+          e.toName,
+          e.toSpriteUrl,
           language,
-          e.pokemonName,
-          e.spriteUrl,
           e.minLevel,
           e.trigger,
           e.item,

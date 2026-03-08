@@ -31,36 +31,57 @@ export class PokemonRepository implements IPokemonRepository {
     language: DataLanguage,
     limit: number,
   ): Promise<PokemonSummary[]> {
-    // 1. Tenta o cache SQLite, devolve se tivermos na base tudo o que foi pedido!
+    // 1. Tenta o cache SQLite
     const cached = await getSummaryList(language);
-    if (cached.length >= limit) return cached.slice(0, limit);
+    const cachedIds = new Set(cached.map((p) => p.id));
 
-    // 2. O que falta? Vai à API em lotes (chunks) do que faltou buscar
-    const startOffset = cached.length;
-    const remainingIds = Array.from(
-      { length: limit - startOffset },
-      (_, i) => i + 1 + startOffset,
-    );
+    // 2. Identifica quais IDs de 1 até o limite NÃO estão no cache
+    const missingIds: number[] = [];
+    for (let id = 1; id <= limit; id++) {
+      if (!cachedIds.has(id)) {
+        missingIds.push(id);
+      }
+    }
+
+    // Se não falta nada, devolve o cache filtrado pelo limite
+    if (missingIds.length === 0) {
+      return cached.filter((p) => p.id <= limit);
+    }
+
+    // 3. Busca apenas os IDs que faltam em lotes (chunks)
     const results: PokemonSummary[] = [];
     const chunkSize = 50;
 
-    for (let i = 0; i < remainingIds.length; i += chunkSize) {
-      const chunk = remainingIds.slice(i, i + chunkSize);
+    for (let i = 0; i < missingIds.length; i += chunkSize) {
+      const chunk = missingIds.slice(i, i + chunkSize);
       const chunkResults = await Promise.all(
         chunk.map(async (id) => {
-          const [pokemon, species] = await Promise.all([
-            cachedGet<ApiPokemon>(`/pokemon/${id}`),
-            cachedGet<ApiPokemonSpecies>(`/pokemon-species/${id}`),
-          ]);
-          return mapSummary(pokemon, species, language);
+          try {
+            const [pokemon, species] = await Promise.all([
+              cachedGet<ApiPokemon>(`/pokemon/${id}`),
+              cachedGet<ApiPokemonSpecies>(`/pokemon-species/${id}`),
+            ]);
+            return mapSummary(pokemon, species, language);
+          } catch (e) {
+            console.warn(`Erro ao carregar summary do Pokémon ${id}:`, e);
+            return null;
+          }
         }),
       );
-      results.push(...chunkResults);
+
+      // Filtra nulos em caso de falha individual na API
+      for (const res of chunkResults) {
+        if (res) results.push(res);
+      }
     }
 
-    // 3. Salva só as novidades em back e une com o LocalDb
-    await saveSummaryList(results, language);
-    return [...cached, ...results];
+    // 4. Salva as novidades e devolve a lista completa e ordenada
+    if (results.length > 0) {
+      await saveSummaryList(results, language);
+    }
+
+    const fullList = [...cached, ...results].sort((a, b) => a.id - b.id);
+    return fullList.filter((p) => p.id <= limit);
   }
 
   async getDetail(
