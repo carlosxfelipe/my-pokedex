@@ -1,65 +1,50 @@
-# Starter Template with React Navigation
+# My Pokédex
 
-This is a minimal starter template for React Native apps using Expo and React Navigation.
+Este projeto é uma aplicação de consulta de Pokémon desenvolvida com foco em performance e robustez, utilizando técnicas avançadas de cache para otimizar o consumo de dados e evitar o uso excessivo da API externa.
 
-It includes the following:
+A aplicação foi concebida especialmente para jogadores de Pokémon FireRed e LeafGreen, considerando o recente relançamento destes títulos pela Nintendo. O projeto prioriza a fidelidade aos dados destas versões clássicas.
 
-- Example [Native Stack](https://reactnavigation.org/docs/native-stack-navigator) with a nested [Bottom Tab](https://reactnavigation.org/docs/bottom-tab-navigator)
-- Web support with [React Native for Web](https://necolas.github.io/react-native-web/)
-- TypeScript support and configured for React Navigation
-- Automatic [deep link](https://reactnavigation.org/docs/deep-linking) and [URL handling configuration](https://reactnavigation.org/docs/configuring-links)
-- Theme support [based on system appearance](https://reactnavigation.org/docs/themes/#using-the-operating-system-preferences)
-- Expo [Development Build](https://docs.expo.dev/develop/development-builds/introduction/) with [Continuous Native Generation](https://docs.expo.dev/workflow/continuous-native-generation/)
+## Como Rodar o Projeto
 
-## Getting Started
+Para executar esta aplicação em seu ambiente local, siga os passos abaixo:
 
-1. Create a new project using this template:
+1. Clone o repositório oficial em: https://github.com/carlosxfelipe/my-pokedex
+2. Certifique-se de ter o Node.js e o ambiente de desenvolvimento (iOS/Android) configurados em sua máquina.
+3. No terminal, acesse a pasta do projeto e instale as dependências:
+   ```bash
+   npm install
+   ```
+4. Inicie o projeto no emulador de sua preferência:
 
-   ```sh
-   npx create-expo-app@latest --template react-navigation/template
+   ```bash
+   # Para iOS
+   npm run ios
+
+   # Para Android
+   npm run android
    ```
 
-2. Edit the `app.json` file to configure the `name`, `slug`, `scheme` and bundle identifiers (`ios.bundleIdentifier` and `android.bundleIdentifier`) for your app.
+### Notas Importantes
 
-3. Edit the `src/App.tsx` file to start working on your app.
+- **Build de Desenvolvimento**: O projeto utiliza builds de desenvolvimento (Expo Dev Client) e, por isso, **não funciona no Expo Go**.
+- **Pastas Nativas**: As pastas `ios/` e `android/` são geradas automaticamente e normalmente são ignoradas pelo Git.
+- **Customizações**: Recomenda-se o uso de _config plugins_ do Expo para qualquer customização nativa adicional.
 
-## Running the app
+## Arquitetura e Tecnologias
 
-- Install the dependencies:
+A aplicação combina o ecossistema moderno de React Native com uma estratégia robusta de performance para oferecer uma experiência de consulta rápida e offline:
 
-  ```sh
-  npm install
-  ```
+- **Gerenciamento de Estado e Navegação**: Utiliza **Zustand** para um store leve e escalável, **MMKV** para persistência ultra-rápida de configurações, e **React Navigation** para transições fluidas entre telas.
 
-- Start the development server:
+* **Estratégia de Dados com SQLite**: Toda consulta é persistida via **Expo SQLite**, reduzindo chamadas de rede à PokéAPI. O sistema implementa uma sincronização de "lacunas", buscando apenas IDs ainda não cacheados localmente.
+* **Flexibilidade de Versões**: Embora otimizado para as regras de **FireRed & LeafGreen**, o app permite alternar nas configurações para exibir todas as gerações (**National Pokédex**). Inclui alternância de idioma para golpes (**Inglês/Espanhol**) e filtros por tipo.
 
-  ```sh
-  npm start
-  ```
+## Licença
 
-- Build and run iOS and Android development builds:
+Este projeto está licenciado sob a **GNU General Public License v3.0 (GPLv3)**. Para mais detalhes, consulte o arquivo [LICENSE](./LICENSE). Diferente de licenças mais permissivas (como a MIT), esta licença garante que o código-fonte e quaisquer melhorias feitas por terceiros permaneçam obrigatoriamente abertos e sob os mesmos termos, impedindo o uso do código em softwares proprietários de código fechado.
 
-  ```sh
-  npm run ios
-  # or
-  npm run android
-  ```
+## Aviso Legal
 
-- In the terminal running the development server, press `i` to open the iOS simulator, `a` to open the Android device or emulator, or `w` to open the web browser.
+Pokémon e conteúdos relacionados pertencem aos seus respectivos detentores de direitos. Conforme as informações legais oficiais da franquia, os direitos envolvem The Pokémon Company e Nintendo (além de parceiros históricos como Creatures Inc. e GAME FREAK inc.).
 
-## Notes
-
-This project uses a [development build](https://docs.expo.dev/develop/development-builds/introduction/) and cannot be run with [Expo Go](https://expo.dev/go). To run the app with Expo Go, edit the `package.json` file, remove the `expo-dev-client` package and `--dev-client` flag from the `start` script.
-
-We highly recommend using the development builds for normal development and testing.
-
-The `ios` and `android` folder are gitignored in the project by default as they are automatically generated during the build process ([Continuous Native Generation](https://docs.expo.dev/workflow/continuous-native-generation/)). This means that you should not edit these folders directly and use [config plugins](https://docs.expo.dev/config-plugins/) instead. However, if you need to edit these folders, you can remove them from the `.gitignore` file so that they are tracked by git.
-
-## Resources
-
-- [React Navigation documentation](https://reactnavigation.org/)
-- [Expo documentation](https://docs.expo.dev/)
-
----
-
-Demo assets are from [lucide.dev](https://lucide.dev/)
+Este aplicativo é um projeto independente, sem afiliação oficial, e utiliza apenas dados públicos disponibilizados pela **PokéAPI**.
