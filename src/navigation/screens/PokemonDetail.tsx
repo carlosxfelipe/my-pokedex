@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import {
   ActivityIndicator,
   Image,
+  Platform,
   ScrollView,
   StyleSheet,
   View,
@@ -9,6 +10,7 @@ import {
 import { useRoute } from "@react-navigation/native";
 import { useTheme } from "@react-navigation/native";
 import { ThemedView } from "../../components/ThemedView";
+import { ThemedStatusBar } from "../../components/ThemedStatusBar";
 import { Text } from "../../components/Text";
 import { ContrastText } from "../../components/ContrastText";
 import { usePokedexStore } from "../../store/usePokedexStore";
@@ -82,6 +84,7 @@ export function PokemonDetail() {
 
   return (
     <ThemedView style={styles.container}>
+      {Platform.OS === "android" && <ThemedStatusBar inverted />}
       {/* Header colorido */}
       <View
         style={[

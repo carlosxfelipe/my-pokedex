@@ -1,6 +1,13 @@
-import { StyleSheet, View, TouchableOpacity, Switch } from "react-native";
+import {
+  Platform,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Switch,
+} from "react-native";
 import { useTheme } from "@react-navigation/native";
 import { ThemedScrollView } from "../../components/ThemedScrollView";
+import { ThemedStatusBar } from "../../components/ThemedStatusBar";
 import { Text } from "../../components/Text";
 import { Chip } from "../../components/Chip";
 import { useSettingsStore } from "../../store/useSettingsStore";
@@ -33,6 +40,7 @@ export function Settings() {
 
   return (
     <ThemedScrollView contentContainerStyle={styles.container}>
+      {Platform.OS === "android" && <ThemedStatusBar inverted />}
       {/* SEÇÃO: IDIOMA */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Idioma dos Dados</Text>

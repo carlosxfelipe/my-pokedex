@@ -1,8 +1,7 @@
 import React, { useMemo } from "react";
 import tinycolor from "tinycolor2";
-import { Text } from "./Text";
 // eslint-disable-next-line no-restricted-imports
-import type { TextProps } from "react-native";
+import { Text, type TextProps } from "react-native";
 
 export interface ContrastTextProps extends TextProps {
   /**

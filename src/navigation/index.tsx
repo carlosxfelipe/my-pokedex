@@ -1,5 +1,8 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { HeaderButton, Text } from "@react-navigation/elements";
+import {
+  HeaderButton as NavHeaderButton,
+  Text,
+} from "@react-navigation/elements";
 import {
   createStaticNavigation,
   StaticParamList,
@@ -8,9 +11,10 @@ import { useTheme } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import type { ComponentProps } from "react";
-import { View } from "react-native";
+import { Platform, View } from "react-native";
 import type { Theme as AppTheme } from "../themes";
 import { Icon, IconProps } from "../components/Icon";
+import { HeaderButton } from "../components/HeaderButton";
 
 import { HeaderGradient } from "../components/HeaderGradient";
 import { HeaderSearchBar } from "../components/HeaderSearchBar";
@@ -170,17 +174,35 @@ const RootStack = createNativeStackNavigator({
       screen: Settings,
       options: ({ navigation }: any) => ({
         presentation: "modal",
+        title: Platform.OS === "android" ? "" : "Configurações",
+        headerTitleAlign: "center",
+        headerLeft: Platform.OS === "android" ? () => null : undefined,
+        headerBackVisible: false,
         headerRight: () => (
-          <HeaderButton onPress={navigation.goBack}>
-            <Text>Fechar</Text>
-          </HeaderButton>
+          <NavHeaderButton onPress={navigation.goBack}>
+            <Text style={{ fontSize: 16 }}>Fechar</Text>
+          </NavHeaderButton>
         ),
       }),
     },
     PokemonDetail: {
       screen: PokemonDetail,
-      options: {
-        title: "Detalhes",
+      options: ({ navigation, theme }: any) => {
+        const appTheme = theme as AppTheme;
+        const color = appTheme.dark ? "#000000" : "#FFFFFF";
+        return {
+          title: Platform.OS === "android" ? "" : "Detalhes",
+          headerTitleAlign: Platform.OS === "android" ? "center" : undefined,
+          headerLeft:
+            Platform.OS === "android"
+              ? () => (
+                  <HeaderButton
+                    onPress={() => navigation.goBack()}
+                    label="Voltar"
+                  />
+                )
+              : undefined,
+        };
       },
     },
     NotFound: {
