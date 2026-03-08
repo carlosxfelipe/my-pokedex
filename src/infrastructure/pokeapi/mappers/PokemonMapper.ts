@@ -42,6 +42,7 @@ export function mapMoves(
   api: ApiPokemon,
   version: "firered" | "leafgreen",
   moveDetails: Map<string, ApiMoveDetail>,
+  language: DataLanguage,
 ): Move[] {
   const moves: Move[] = [];
 
@@ -56,8 +57,12 @@ export function mapMoves(
     const detail = moveDetails.get(entry.move.name);
     if (!detail) continue;
 
+    const localizedName =
+      getLocalizedName(detail.names, language) ??
+      entry.move.name.replace(/-/g, " ");
+
     moves.push({
-      name: entry.move.name.replace(/-/g, " "),
+      name: localizedName,
       level: versionDetail.level_learned_at,
       type: detail.type.name as PokemonType,
       power: detail.power,

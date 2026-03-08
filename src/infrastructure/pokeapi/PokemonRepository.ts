@@ -87,7 +87,7 @@ export class PokemonRepository implements IPokemonRepository {
       }),
     );
     const moveDetails = new Map(moveDetailEntries);
-    const moves = mapMoves(pokemon, version, moveDetails);
+    const moves = mapMoves(pokemon, version, moveDetails, language);
 
     const evolutionChain = await cachedGet<ApiEvolutionChain>(
       species.evolution_chain.url,

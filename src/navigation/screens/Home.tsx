@@ -2,10 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
-  Image,
   StyleSheet,
   TouchableOpacity,
-  View,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "@react-navigation/native";
@@ -13,63 +11,9 @@ import { ThemedView } from "../../components/ThemedView";
 import { Text } from "../../components/Text";
 import { usePokedexStore } from "../../store/usePokedexStore";
 import { useSettingsStore } from "../../store/useSettingsStore";
-import type { PokemonSummary } from "../../domain/entities/Pokemon";
 import type { Theme as AppTheme } from "../../themes";
-import { TYPE_COLORS, TYPE_LABELS_PT } from "../../utils/pokemonTypes";
-
-function PokemonCard({
-  pokemon,
-  onPress,
-}: {
-  pokemon: PokemonSummary;
-  onPress: () => void;
-}) {
-  const theme = useTheme() as AppTheme;
-  const primaryType = pokemon.types[0];
-
-  return (
-    <TouchableOpacity
-      style={[styles.card, { backgroundColor: theme.colors.card }]}
-      onPress={onPress}
-      activeOpacity={0.75}
-    >
-      <View
-        style={[
-          styles.cardBadge,
-          { backgroundColor: TYPE_COLORS[primaryType] + "30" },
-        ]}
-      >
-        {pokemon.spriteUrl ? (
-          <Image
-            source={{ uri: pokemon.spriteUrl }}
-            style={styles.sprite}
-            resizeMode="contain"
-          />
-        ) : (
-          <View
-            style={[styles.sprite, { backgroundColor: theme.colors.border }]}
-          />
-        )}
-      </View>
-      <View style={styles.cardInfo}>
-        <Text style={styles.cardNumber}>
-          #{String(pokemon.id).padStart(3, "0")}
-        </Text>
-        <Text style={styles.cardName}>{pokemon.name}</Text>
-        <View style={styles.typeTags}>
-          {pokemon.types.map((type) => (
-            <View
-              key={type}
-              style={[styles.typeTag, { backgroundColor: TYPE_COLORS[type] }]}
-            >
-              <Text style={styles.typeTagText}>{TYPE_LABELS_PT[type]}</Text>
-            </View>
-          ))}
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
-}
+import { PokemonCard } from "../../components/PokemonCard";
+import { isCatchable } from "../../utils/versionExclusives";
 
 export function Home() {
   const navigation = useNavigation<any>();
@@ -126,6 +70,7 @@ export function Home() {
         renderItem={({ item }) => (
           <PokemonCard
             pokemon={item}
+            isCatchable={isCatchable(item.id, gameVersion)}
             onPress={() => {
               navigation.navigate("PokemonDetail", { id: item.id });
             }}
@@ -154,50 +99,5 @@ const styles = StyleSheet.create({
   },
   row: {
     gap: 12,
-  },
-  card: {
-    flex: 1,
-    borderRadius: 16,
-    overflow: "hidden",
-  },
-  cardBadge: {
-    width: "100%",
-    alignItems: "center",
-    paddingVertical: 12,
-  },
-  sprite: {
-    width: 96,
-    height: 96,
-  },
-  cardInfo: {
-    padding: 10,
-    gap: 4,
-  },
-  cardNumber: {
-    fontSize: 11,
-    opacity: 0.5,
-    fontWeight: "600",
-  },
-  cardName: {
-    fontSize: 15,
-    fontWeight: "700",
-    textTransform: "capitalize",
-  },
-  typeTags: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 4,
-    marginTop: 2,
-  },
-  typeTag: {
-    borderRadius: 6,
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-  },
-  typeTagText: {
-    fontSize: 11,
-    fontWeight: "600",
-    color: "#fff",
-    textTransform: "capitalize",
   },
 });

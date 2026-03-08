@@ -12,7 +12,6 @@ export function Text({ style, ...rest }: TextProps) {
         {
           color: colors.text,
           fontSize: 16,
-          lineHeight: 24,
         },
         fonts.regular,
         style,

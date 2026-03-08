@@ -59,6 +59,7 @@ export interface ApiMove {
 
 export interface ApiMoveDetail {
   name: string;
+  names: { name: string; language: ApiNamedResource }[];
   type: ApiNamedResource;
   damage_class: ApiNamedResource;
   power: number | null;

@@ -1,6 +1,6 @@
 import type { PokemonType } from "../domain/value-objects/PokemonType";
 
-export const TYPE_COLORS: Record<PokemonType, string> = {
+export const TYPE_COLORS_LIGHT: Record<PokemonType, string> = {
   normal: "#A8A878",
   fire: "#F08030",
   water: "#6890F0",
@@ -19,6 +19,27 @@ export const TYPE_COLORS: Record<PokemonType, string> = {
   dark: "#705848",
   steel: "#B8B8D0",
   fairy: "#EE99AC",
+};
+
+export const TYPE_COLORS_DARK: Record<PokemonType, string> = {
+  normal: "#9CA3AF",
+  fire: "#F97316",
+  water: "#3B82F6",
+  electric: "#EAB308",
+  grass: "#22C55E",
+  ice: "#6EE7B7",
+  fighting: "#EF4444",
+  poison: "#8B5CF6",
+  ground: "#D97706",
+  flying: "#818CF8",
+  psychic: "#EC4899",
+  bug: "#84CC16",
+  rock: "#B45309",
+  ghost: "#6366F1",
+  dragon: "#4F46E5",
+  dark: "#475569",
+  steel: "#64748B",
+  fairy: "#F472B6",
 };
 
 export const TYPE_LABELS_PT: Record<PokemonType, string> = {

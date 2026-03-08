@@ -4,7 +4,7 @@ import type { Move } from "../../domain/entities/Move";
 import type { Evolution } from "../../domain/entities/Evolution";
 import type { PokemonType } from "../../domain/value-objects/PokemonType";
 
-const DB_NAME = "pokedex.db";
+const DB_NAME = "pokedex_v2.db";
 
 let _db: SQLite.SQLiteDatabase | null = null;
 
@@ -32,25 +32,27 @@ export async function initDatabase(): Promise<void> {
     CREATE TABLE IF NOT EXISTS pokemon_moves (
       pokemon_id  INTEGER NOT NULL,
       version     TEXT    NOT NULL,
+      language    TEXT    NOT NULL,
       level       INTEGER NOT NULL,
       name        TEXT    NOT NULL,
       type        TEXT    NOT NULL,
       power       INTEGER,
       accuracy    INTEGER,
       category    TEXT    NOT NULL,
-      PRIMARY KEY (pokemon_id, version, name)
+      PRIMARY KEY (pokemon_id, version, language, name)
     );
 
     CREATE TABLE IF NOT EXISTS pokemon_evolutions (
       source_id   INTEGER NOT NULL,
       pokemon_id  INTEGER NOT NULL,
+      language    TEXT    NOT NULL,
       pokemon_name TEXT   NOT NULL,
       sprite_url  TEXT,
       min_level   INTEGER,
       trigger     TEXT    NOT NULL,
       item        TEXT,
       sort_order  INTEGER NOT NULL,
-      PRIMARY KEY (source_id, pokemon_id)
+      PRIMARY KEY (source_id, pokemon_id, language)
     );
   `);
 }
@@ -125,8 +127,8 @@ export async function getPokemonDetail(
     category: string;
   }>(
     `SELECT level, name, type, power, accuracy, category
-     FROM pokemon_moves WHERE pokemon_id = ? AND version = ? ORDER BY level`,
-    [id, version],
+     FROM pokemon_moves WHERE pokemon_id = ? AND version = ? AND language = ? ORDER BY level`,
+    [id, version, language],
   );
 
   const evoRows = await db.getAllAsync<{
@@ -138,8 +140,8 @@ export async function getPokemonDetail(
     item: string | null;
   }>(
     `SELECT pokemon_id, pokemon_name, sprite_url, min_level, trigger, item
-     FROM pokemon_evolutions WHERE source_id = ? ORDER BY sort_order`,
-    [id],
+     FROM pokemon_evolutions WHERE source_id = ? AND language = ? ORDER BY sort_order`,
+    [id, language],
   );
 
   return {
@@ -190,11 +192,12 @@ export async function savePokemonDetail(
     // Moves
     for (const m of pokemon.moves) {
       await db.runAsync(
-        `INSERT OR REPLACE INTO pokemon_moves (pokemon_id, version, level, name, type, power, accuracy, category)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+        `INSERT OR REPLACE INTO pokemon_moves (pokemon_id, version, language, level, name, type, power, accuracy, category)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           pokemon.id,
           version,
+          language,
           m.level,
           m.name,
           m.type,
@@ -210,11 +213,12 @@ export async function savePokemonDetail(
       const e = pokemon.evolutionChain[i];
       await db.runAsync(
         `INSERT OR REPLACE INTO pokemon_evolutions
-           (source_id, pokemon_id, pokemon_name, sprite_url, min_level, trigger, item, sort_order)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+           (source_id, pokemon_id, language, pokemon_name, sprite_url, min_level, trigger, item, sort_order)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [
           pokemon.id,
           e.pokemonId,
+          language,
           e.pokemonName,
           e.spriteUrl,
           e.minLevel,

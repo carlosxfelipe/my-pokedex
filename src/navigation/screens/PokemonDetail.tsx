@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   ActivityIndicator,
   Image,
@@ -14,10 +14,15 @@ import { usePokedexStore } from "../../store/usePokedexStore";
 import { useSettingsStore } from "../../store/useSettingsStore";
 import type { Theme as AppTheme } from "../../themes";
 import type { Move } from "../../domain/entities/Move";
-import { TYPE_COLORS, TYPE_LABELS_PT } from "../../utils/pokemonTypes";
+import {
+  TYPE_COLORS_LIGHT,
+  TYPE_COLORS_DARK,
+  TYPE_LABELS_PT,
+} from "../../utils/pokemonTypes";
 
 function MoveRow({ move }: { move: Move }) {
   const theme = useTheme() as AppTheme;
+  const TYPE_COLORS = theme.dark ? TYPE_COLORS_DARK : TYPE_COLORS_LIGHT;
   return (
     <View style={[styles.moveRow, { borderBottomColor: theme.colors.border }]}>
       <Text style={styles.moveLevel}>
@@ -41,6 +46,7 @@ export function PokemonDetail() {
   const route = useRoute<any>();
   const { id } = route.params as { id: number };
   const theme = useTheme() as AppTheme;
+  const TYPE_COLORS = theme.dark ? TYPE_COLORS_DARK : TYPE_COLORS_LIGHT;
   const { selectedPokemon, detailLoading, detailError, loadDetail } =
     usePokedexStore();
   const { gameVersion, language } = useSettingsStore();
@@ -105,26 +111,30 @@ export function PokemonDetail() {
             <Text style={styles.sectionTitle}>Evoluções</Text>
             <View style={styles.evoChain}>
               {p.evolutionChain.map((evo, i) => (
-                <View key={evo.pokemonId} style={styles.evoItem}>
+                <React.Fragment key={evo.pokemonId}>
                   {i > 0 && (
-                    <Text style={styles.evoArrow}>
-                      {evo.minLevel
-                        ? `Lv ${evo.minLevel}`
-                        : (evo.item ?? evo.trigger)}
-                      {"\n→"}
-                    </Text>
+                    <View style={styles.evoArrowContainer}>
+                      <Text style={styles.evoArrow}>
+                        {evo.minLevel
+                          ? `Lv ${evo.minLevel}`
+                          : (evo.item ?? evo.trigger)}
+                        {"\n→"}
+                      </Text>
+                    </View>
                   )}
-                  {evo.spriteUrl ? (
-                    <Image
-                      source={{ uri: evo.spriteUrl }}
-                      style={styles.evoSprite}
-                      resizeMode="contain"
-                    />
-                  ) : null}
-                  <Text style={styles.evoName} numberOfLines={1}>
-                    {evo.pokemonName}
-                  </Text>
-                </View>
+                  <View style={styles.evoItem}>
+                    {evo.spriteUrl ? (
+                      <Image
+                        source={{ uri: evo.spriteUrl }}
+                        style={styles.evoSprite}
+                        resizeMode="contain"
+                      />
+                    ) : null}
+                    <Text style={styles.evoName} numberOfLines={1}>
+                      {evo.pokemonName}
+                    </Text>
+                  </View>
+                </React.Fragment>
               ))}
             </View>
           </View>
@@ -176,6 +186,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: "800",
     textTransform: "capitalize",
+    paddingVertical: 4,
   },
   heroTypes: { flexDirection: "row", gap: 8 },
   typeTag: {
@@ -205,6 +216,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   evoItem: { alignItems: "center", gap: 4, minWidth: 72 },
+  evoArrowContainer: { paddingBottom: 24, paddingHorizontal: 4 },
   evoArrow: { fontSize: 11, textAlign: "center", opacity: 0.6 },
   evoSprite: { width: 72, height: 72 },
   evoName: {
