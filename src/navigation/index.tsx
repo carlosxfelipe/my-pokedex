@@ -7,20 +7,23 @@ import {
 import { useTheme } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import type { ComponentProps } from "react";
 import { View } from "react-native";
 import type { Theme as AppTheme } from "../themes";
+import { Icon, IconProps } from "../components/Icon";
 
 import { HeaderGradient } from "../components/HeaderGradient";
 import { HeaderSearchBar } from "../components/HeaderSearchBar";
 import { Home } from "./screens/Home";
 import { Settings } from "./screens/Settings";
-import { About } from "./screens/About";
+import { TypeMatchups } from "./screens/TypeMatchups";
 import { NotFound } from "./screens/NotFound";
 import { PokemonDetail } from "./screens/PokemonDetail";
 
-type MaterialIconName = ComponentProps<typeof MaterialCommunityIcons>["name"];
+type MaterialCommunityIconName = Extract<
+  IconProps,
+  { type: "MaterialCommunityIcons" }
+>["name"];
 
 function TabBarIcon({
   iconName,
@@ -29,8 +32,8 @@ function TabBarIcon({
   size,
   focused,
 }: {
-  iconName: MaterialIconName;
-  activeIconName: MaterialIconName;
+  iconName: MaterialCommunityIconName;
+  activeIconName: MaterialCommunityIconName;
   color: string;
   size: number;
   focused: boolean;
@@ -50,7 +53,8 @@ function TabBarIcon({
           }}
         />
       )}
-      <MaterialCommunityIcons
+      <Icon
+        type="MaterialCommunityIcons"
         name={focused ? activeIconName : iconName}
         color={color}
         size={size}
@@ -63,8 +67,8 @@ const tabItems: {
   name: string;
   component: React.ComponentType<any>;
   title: string;
-  iconName: MaterialIconName;
-  activeIconName: MaterialIconName;
+  iconName: MaterialCommunityIconName;
+  activeIconName: MaterialCommunityIconName;
   headerTitle?: () => React.ReactNode;
 }[] = [
   {
@@ -81,11 +85,11 @@ const tabItems: {
     ),
   },
   {
-    name: "About",
-    component: About,
-    title: "Sobre",
-    iconName: "information-outline",
-    activeIconName: "information",
+    name: "Matchups",
+    component: TypeMatchups,
+    title: "Combate",
+    iconName: "sword-cross",
+    activeIconName: "sword-cross",
   },
 ];
 

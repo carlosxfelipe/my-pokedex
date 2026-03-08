@@ -8,12 +8,15 @@ import {
   StyleSheet,
   useWindowDimensions,
 } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Icon, IconProps } from "./Icon";
 
-type IconName = ComponentProps<typeof MaterialCommunityIcons>["name"];
+type MaterialCommunityIconName = Extract<
+  IconProps,
+  { type: "MaterialCommunityIcons" }
+>["name"];
 
 interface HeaderIcon {
-  icon: IconName;
+  icon: MaterialCommunityIconName;
   screen?: string;
   onPress?: () => void;
 }
@@ -52,7 +55,8 @@ export function HeaderSearchBar({ leftIcon, rightIcon }: Props) {
           else if (item?.screen) navigation.navigate(item.screen as never);
         }}
       >
-        <MaterialCommunityIcons
+        <Icon
+          type="MaterialCommunityIcons"
           name={item?.icon ?? "circle"}
           size={24}
           color={textColor}
@@ -65,7 +69,12 @@ export function HeaderSearchBar({ leftIcon, rightIcon }: Props) {
     <View style={[styles.row, { width: barWidth }]}>
       <Slot item={leftIcon} />
       <View style={[styles.inputContainer, { backgroundColor }]}>
-        <MaterialCommunityIcons name="magnify" size={18} color={textColor} />
+        <Icon
+          type="MaterialCommunityIcons"
+          name="magnify"
+          size={18}
+          color={textColor}
+        />
         <TextInput
           style={[styles.input, { color: textColor }]}
           placeholder="Buscar Pokémon..."
