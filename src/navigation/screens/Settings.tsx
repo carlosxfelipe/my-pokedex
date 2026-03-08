@@ -3,9 +3,9 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
-  Switch,
   Alert,
 } from "react-native";
+import { PlatformSwitch } from "../../components/PlatformSwitch";
 import { useTheme } from "@react-navigation/native";
 import { ThemedScrollView } from "../../components/ThemedScrollView";
 import { ThemedStatusBar } from "../../components/ThemedStatusBar";
@@ -56,7 +56,7 @@ export function Settings() {
                 Golpes e Pokédex em espanhol. Se desativado, usará inglês.
               </Text>
             </View>
-            <Switch
+            <PlatformSwitch
               value={isSpanish}
               onValueChange={toggleLanguage}
               trackColor={{ true: theme.colors.primary, false: "#767577" }}
@@ -79,7 +79,7 @@ export function Settings() {
                 originais FireRed e LeafGreen (Acima do #386).
               </Text>
             </View>
-            <Switch
+            <PlatformSwitch
               value={showAllGenerations}
               onValueChange={setShowAllGenerations}
               trackColor={{ true: theme.colors.primary, false: "#767577" }}

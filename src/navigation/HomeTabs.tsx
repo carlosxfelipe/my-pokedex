@@ -1,5 +1,9 @@
-import { View, Alert, Linking } from "react-native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { View, Alert, Linking, Platform } from "react-native";
+import {
+  BottomTabBar,
+  BottomTabBarProps,
+  createBottomTabNavigator,
+} from "@react-navigation/bottom-tabs";
 import { useTheme } from "@react-navigation/native";
 import { Icon, IconProps } from "../components/Icon";
 import { HeaderGradient } from "../components/HeaderGradient";
@@ -70,6 +74,18 @@ const handleCreatorInfo = () => {
   );
 };
 
+function AndroidTabBar(props: BottomTabBarProps) {
+  return (
+    <BottomTabBar
+      {...props}
+      insets={{
+        ...props.insets,
+        bottom: props.insets.bottom + 8,
+      }}
+    />
+  );
+}
+
 const tabItems: {
   name: string;
   component: React.ComponentType<any>;
@@ -108,6 +124,9 @@ const tabItems: {
 ];
 
 export const HomeTabs = createBottomTabNavigator({
+  ...(Platform.OS === "android" && {
+    tabBar: (props: BottomTabBarProps) => <AndroidTabBar {...props} />,
+  }),
   screenOptions: ({ theme }) => {
     const appTheme = theme as AppTheme;
 
