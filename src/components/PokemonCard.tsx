@@ -1,5 +1,6 @@
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
 import { useTheme } from "@react-navigation/native";
+import { Icon } from "./Icon";
 import { Text } from "./Text";
 import {
   TYPE_COLORS_LIGHT,
@@ -8,29 +9,26 @@ import {
 } from "../utils/pokemonTypes";
 import type { PokemonSummary } from "../domain/entities/Pokemon";
 import type { Theme as AppTheme } from "../themes";
+import { getExclusiveVersion } from "../utils/versionExclusives";
 
 interface PokemonCardProps {
   pokemon: PokemonSummary;
-  isCatchable?: boolean;
   onPress: () => void;
 }
 
-export function PokemonCard({
-  pokemon,
-  isCatchable = true,
-  onPress,
-}: PokemonCardProps) {
+export function PokemonCard({ pokemon, onPress }: PokemonCardProps) {
   const theme = useTheme() as AppTheme;
   const TYPE_COLORS = theme.dark ? TYPE_COLORS_DARK : TYPE_COLORS_LIGHT;
   const primaryType = pokemon.types[0];
+  const exclusive = getExclusiveVersion(pokemon.id);
+
+  const BADGE_COLORS = theme.dark
+    ? { firered: "#EF5350", leafgreen: "#66BB6A" }
+    : { firered: "#D32F2F", leafgreen: "#2E7D32" };
 
   return (
     <TouchableOpacity
-      style={[
-        styles.card,
-        { backgroundColor: theme.colors.card },
-        !isCatchable && styles.uncatchableCard,
-      ]}
+      style={[styles.card, { backgroundColor: theme.colors.card }]}
       onPress={onPress}
       activeOpacity={0.75}
     >
@@ -43,7 +41,7 @@ export function PokemonCard({
         {pokemon.spriteUrl ? (
           <Image
             source={{ uri: pokemon.spriteUrl }}
-            style={[styles.sprite, !isCatchable && styles.uncatchableSprite]}
+            style={styles.sprite}
             resizeMode="contain"
           />
         ) : (
@@ -52,6 +50,29 @@ export function PokemonCard({
           />
         )}
       </View>
+
+      {exclusive && (
+        <View style={styles.exclusiveBadgesRow}>
+          <View
+            style={[
+              styles.exclusiveBadge,
+              {
+                backgroundColor: BADGE_COLORS[exclusive],
+              },
+            ]}
+          >
+            <Icon
+              type="Ionicons"
+              name={exclusive === "firered" ? "flame" : "leaf"}
+              size={10}
+              color="#fff"
+            />
+            <Text style={styles.exclusiveText}>
+              {exclusive === "firered" ? "FR" : "LG"}
+            </Text>
+          </View>
+        </View>
+      )}
 
       <View style={styles.cardInfo}>
         <Text style={styles.cardNumber}>
@@ -121,10 +142,25 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     color: "#fff",
   },
-  uncatchableCard: {
-    opacity: 0.5,
+  exclusiveBadgesRow: {
+    position: "absolute",
+    top: 8,
+    right: 8,
+    flexDirection: "column",
+    gap: 4,
   },
-  uncatchableSprite: {
-    tintColor: "rgba(0,0,0,0.5)",
+  exclusiveBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 2,
+    paddingHorizontal: 6,
+    paddingVertical: 3,
+    borderRadius: 8,
+    alignSelf: "flex-end",
+  },
+  exclusiveText: {
+    fontSize: 9,
+    fontWeight: "700",
+    color: "#fff",
   },
 });

@@ -13,13 +13,12 @@ import { usePokedexStore } from "../../store/usePokedexStore";
 import { useSettingsStore } from "../../store/useSettingsStore";
 import type { Theme as AppTheme } from "../../themes";
 import { PokemonCard } from "../../components/PokemonCard";
-import { isCatchable } from "../../utils/versionExclusives";
 
 export function Home() {
   const navigation = useNavigation<any>();
   const theme = useTheme() as AppTheme;
   const { list, listLoading, listError, loadList } = usePokedexStore();
-  const { language, gameVersion } = useSettingsStore();
+  const { language, typeFilter } = useSettingsStore();
 
   const [query, setQuery] = useState("");
 
@@ -30,14 +29,23 @@ export function Home() {
   }, [language]);
 
   const filtered = useMemo(() => {
-    if (!query.trim()) return list;
-    const q = query.toLowerCase();
-    return list.filter(
-      (p) =>
-        p.name.toLowerCase().includes(q) ||
-        String(p.id).padStart(3, "0").includes(q),
-    );
-  }, [list, query]);
+    let result = list;
+
+    if (typeFilter !== "all") {
+      result = result.filter((p) => p.types.includes(typeFilter as any));
+    }
+
+    if (query.trim()) {
+      const q = query.toLowerCase();
+      result = result.filter(
+        (p) =>
+          p.name.toLowerCase().includes(q) ||
+          String(p.id).padStart(3, "0").includes(q),
+      );
+    }
+
+    return result;
+  }, [list, query, typeFilter]);
 
   if (listLoading) {
     return (
@@ -70,7 +78,6 @@ export function Home() {
         renderItem={({ item }) => (
           <PokemonCard
             pokemon={item}
-            isCatchable={isCatchable(item.id, gameVersion)}
             onPress={() => {
               navigation.navigate("PokemonDetail", { id: item.id });
             }}

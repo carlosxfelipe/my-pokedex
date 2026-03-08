@@ -140,11 +140,8 @@ export function PokemonDetail() {
           </View>
         )}
 
-        {/* Golpes */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>
-            Golpes — {gameVersion === "firered" ? "FireRed" : "LeafGreen"}
-          </Text>
+          <Text style={styles.sectionTitle}>Golpes — FireRed & LeafGreen</Text>
           {/* Header da tabela */}
           <View
             style={[styles.moveRow, { borderBottomColor: theme.colors.border }]}

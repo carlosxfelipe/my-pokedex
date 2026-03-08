@@ -4,10 +4,9 @@ import { ThemedView } from "../../components/ThemedView";
 import { Text } from "../../components/Text";
 import { useSettingsStore } from "../../store/useSettingsStore";
 import type { Theme as AppTheme } from "../../themes";
-import type {
-  GameVersion,
-  DataLanguage,
-} from "../../domain/value-objects/GameVersion";
+import type { DataLanguage } from "../../domain/value-objects/GameVersion";
+import { TYPE_LABELS_PT } from "../../utils/pokemonTypes";
+import type { PokemonType } from "../../domain/value-objects/PokemonType";
 
 function OptionGroup<T extends string>({
   label,
@@ -59,21 +58,21 @@ function OptionGroup<T extends string>({
 }
 
 export function Settings() {
-  const { gameVersion, language, setGameVersion, setLanguage } =
+  const { language, setLanguage, typeFilter, setTypeFilter } =
     useSettingsStore();
+
+  const typeOptions: { value: PokemonType | "all"; label: string }[] = [
+    { value: "all", label: "Todos" },
+    ...(Object.entries(TYPE_LABELS_PT) as [PokemonType, string][]).map(
+      ([key, label]) => ({
+        value: key,
+        label,
+      }),
+    ),
+  ];
 
   return (
     <ThemedView style={styles.container}>
-      <OptionGroup<GameVersion>
-        label="Versão do jogo"
-        selected={gameVersion}
-        onSelect={setGameVersion}
-        options={[
-          { value: "firered", label: "🔥 FireRed" },
-          { value: "leafgreen", label: "🍃 LeafGreen" },
-        ]}
-      />
-
       <OptionGroup<DataLanguage>
         label="Idioma dos dados"
         selected={language}
@@ -82,6 +81,13 @@ export function Settings() {
           { value: "en", label: "🇺🇸 English" },
           { value: "es", label: "🇪🇸 Español" },
         ]}
+      />
+
+      <OptionGroup<PokemonType | "all">
+        label="Filtrar por Tipo"
+        selected={typeFilter}
+        onSelect={setTypeFilter}
+        options={typeOptions}
       />
     </ThemedView>
   );
@@ -105,11 +111,12 @@ const styles = StyleSheet.create({
   },
   pills: {
     flexDirection: "row",
+    flexWrap: "wrap",
     gap: 10,
   },
   pill: {
-    flex: 1,
     paddingVertical: 12,
+    paddingHorizontal: 16,
     borderRadius: 12,
     borderWidth: 1.5,
     alignItems: "center",

@@ -6,6 +6,7 @@ import type {
   GameVersion,
   DataLanguage,
 } from "../domain/value-objects/GameVersion";
+import type { PokemonType } from "../domain/value-objects/PokemonType";
 
 // Instância MMKV v4 (Nitro)
 const mmkv = createMMKV({ id: "pokedex-settings" });
@@ -20,8 +21,10 @@ const mmkvStorage: StateStorage = {
 interface SettingsState {
   gameVersion: GameVersion;
   language: DataLanguage;
+  typeFilter: PokemonType | "all";
   setGameVersion: (version: GameVersion) => void;
   setLanguage: (language: DataLanguage) => void;
+  setTypeFilter: (typeFilter: PokemonType | "all") => void;
 }
 
 export const useSettingsStore = create<SettingsState>()(
@@ -29,8 +32,10 @@ export const useSettingsStore = create<SettingsState>()(
     (set) => ({
       gameVersion: "firered",
       language: "en",
+      typeFilter: "all",
       setGameVersion: (gameVersion) => set({ gameVersion }),
       setLanguage: (language) => set({ language }),
+      setTypeFilter: (typeFilter) => set({ typeFilter }),
     }),
     {
       name: "settings",

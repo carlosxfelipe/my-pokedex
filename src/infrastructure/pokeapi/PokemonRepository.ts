@@ -24,25 +24,32 @@ import {
   savePokemonDetail,
 } from "../database/PokemonDatabase";
 
-const KANTO_TOTAL = 151;
+const NATIONAL_TOTAL = 386;
 
 export class PokemonRepository implements IPokemonRepository {
   async listKanto(language: DataLanguage): Promise<PokemonSummary[]> {
     // 1. Tenta o cache SQLite
     const cached = await getSummaryList(language);
-    if (cached.length === KANTO_TOTAL) return cached;
+    if (cached.length === NATIONAL_TOTAL) return cached;
 
-    // 2. Vai à API e salva no cache
-    const ids = Array.from({ length: KANTO_TOTAL }, (_, i) => i + 1);
-    const results = await Promise.all(
-      ids.map(async (id) => {
-        const [pokemon, species] = await Promise.all([
-          cachedGet<ApiPokemon>(`/pokemon/${id}`),
-          cachedGet<ApiPokemonSpecies>(`/pokemon-species/${id}`),
-        ]);
-        return mapSummary(pokemon, species, language);
-      }),
-    );
+    // 2. Vai à API em lotes (chunks) para não estourar os limites da PokéAPI
+    const ids = Array.from({ length: NATIONAL_TOTAL }, (_, i) => i + 1);
+    const results: PokemonSummary[] = [];
+    const chunkSize = 50;
+
+    for (let i = 0; i < ids.length; i += chunkSize) {
+      const chunk = ids.slice(i, i + chunkSize);
+      const chunkResults = await Promise.all(
+        chunk.map(async (id) => {
+          const [pokemon, species] = await Promise.all([
+            cachedGet<ApiPokemon>(`/pokemon/${id}`),
+            cachedGet<ApiPokemonSpecies>(`/pokemon-species/${id}`),
+          ]);
+          return mapSummary(pokemon, species, language);
+        }),
+      );
+      results.push(...chunkResults);
+    }
 
     await saveSummaryList(results, language);
     return results;
@@ -96,6 +103,7 @@ export class PokemonRepository implements IPokemonRepository {
     const spriteMap = new Map<number, string | null>();
     const collectIds = (chain: typeof evolutionChain.chain): number[] => {
       const id = extractIdFromUrl(chain.species.url);
+      if (id > 386) return [];
       return [id, ...chain.evolves_to.flatMap(collectIds)];
     };
     const chainIds = collectIds(evolutionChain.chain);

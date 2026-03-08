@@ -86,6 +86,9 @@ function extractEvolutions(
     const nameSlug = next.species.name;
     const id = extractIdFromUrl(next.species.url);
 
+    // Ignora completamente Pokémon que não existem nas Gerações 1-3 (FR/LG)
+    if (id > 386) continue;
+
     result.push({
       pokemonId: id,
       pokemonName: nameSlug,
