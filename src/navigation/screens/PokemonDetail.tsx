@@ -63,7 +63,7 @@ export function PokemonDetail() {
   const detailKey = String(id);
   const theme = useTheme() as AppTheme;
   const TYPE_COLORS = theme.dark ? TYPE_COLORS_DARK : TYPE_COLORS_LIGHT;
-  const { detailById, detailLoadingById, detailErrorById, loadDetail } =
+  const { detailById, detailLoadingById, detailErrorById, loadDetail, list } =
     usePokedexStore();
   const { gameVersion, language, showAllGenerations } = useSettingsStore();
 
@@ -161,15 +161,18 @@ export function PokemonDetail() {
                   <TouchableOpacity
                     style={styles.evoMember}
                     activeOpacity={0.7}
-                    onPress={() =>
+                    onPress={() => {
+                      const fromTypes =
+                        detailById[String(evo.fromId)]?.types ??
+                        list.find((p) => p.id === evo.fromId)?.types;
                       navigation.push("PokemonDetail", {
                         id: evo.fromId,
                         name: capitalize(evo.fromName),
-                        color: detailById[String(evo.fromId)]
-                          ? TYPE_COLORS[detailById[String(evo.fromId)].types[0]]
+                        color: fromTypes
+                          ? TYPE_COLORS[fromTypes[0]]
                           : undefined,
-                      })
-                    }
+                      });
+                    }}
                   >
                     {evo.fromSpriteUrl ? (
                       <Image
@@ -207,15 +210,16 @@ export function PokemonDetail() {
                   <TouchableOpacity
                     style={styles.evoMember}
                     activeOpacity={0.7}
-                    onPress={() =>
+                    onPress={() => {
+                      const toTypes =
+                        detailById[String(evo.toId)]?.types ??
+                        list.find((p) => p.id === evo.toId)?.types;
                       navigation.push("PokemonDetail", {
                         id: evo.toId,
                         name: capitalize(evo.toName),
-                        color: detailById[String(evo.toId)]
-                          ? TYPE_COLORS[detailById[String(evo.toId)].types[0]]
-                          : undefined,
-                      })
-                    }
+                        color: toTypes ? TYPE_COLORS[toTypes[0]] : undefined,
+                      });
+                    }}
                   >
                     {evo.toSpriteUrl ? (
                       <Image

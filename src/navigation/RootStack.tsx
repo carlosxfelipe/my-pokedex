@@ -49,6 +49,7 @@ export const RootStack = createNativeStackNavigator({
                 ? (typeColor ?? appTheme.colors.primary)
                 : "transparent",
           },
+          headerBackground: () => <HeaderGradient color={typeColor} />,
         };
       },
     },
