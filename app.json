@@ -2,8 +2,9 @@
   "expo": {
     "name": "my-pokedex",
     "slug": "my-pokedex",
+    "displayName": "My Pokédex",
     "version": "1.0.0",
-    "orientation": "default",
+    "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,

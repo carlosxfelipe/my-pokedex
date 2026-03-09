@@ -44,20 +44,19 @@ export function HeaderSearchBar({ leftIcon, rightIcon }: Props) {
 
   const barWidth = screenWidth - HEADER_H_PADDING * 2;
 
-  function Slot({ item }: { item?: HeaderIcon }) {
+  function IconButton({ item }: { item: HeaderIcon }) {
     return (
       <TouchableOpacity
-        style={[styles.iconButton, { opacity: item ? 1 : 0 }]}
-        disabled={!item}
+        style={styles.iconButton}
         hitSlop={8}
         onPress={() => {
-          if (item?.onPress) item.onPress();
-          else if (item?.screen) navigation.navigate(item.screen as never);
+          if (item.onPress) item.onPress();
+          else if (item.screen) navigation.navigate(item.screen as never);
         }}
       >
         <Icon
           type="MaterialCommunityIcons"
-          name={item?.icon ?? "circle"}
+          name={item.icon}
           size={24}
           color={textColor}
         />
@@ -67,7 +66,7 @@ export function HeaderSearchBar({ leftIcon, rightIcon }: Props) {
 
   return (
     <View style={[styles.row, { width: barWidth }]}>
-      <Slot item={leftIcon} />
+      {leftIcon && <IconButton item={leftIcon} />}
       <View style={[styles.inputContainer, { backgroundColor }]}>
         <Icon
           type="MaterialCommunityIcons"
@@ -97,7 +96,7 @@ export function HeaderSearchBar({ leftIcon, rightIcon }: Props) {
           </TouchableOpacity>
         )}
       </View>
-      <Slot item={rightIcon} />
+      {rightIcon && <IconButton item={rightIcon} />}
     </View>
   );
 }
