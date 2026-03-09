@@ -1,6 +1,6 @@
 # My Pokédex
 
-Este projeto é uma aplicação de consulta de Pokémon desenvolvida com foco em performance e robustez, utilizando técnicas avançadas de cache para otimizar o consumo de dados e evitar o uso excessivo da API externa.
+Aplicativo mobile desenvolvido com **React Native** (Expo) para iOS e Android, focado em consulta de Pokémon com performance e robustez, utilizando técnicas avançadas de cache para otimizar o consumo de dados e evitar o uso excessivo da API externa.
 
 A aplicação foi concebida especialmente para jogadores de Pokémon FireRed e LeafGreen, considerando o recente relançamento destes títulos pela Nintendo. O projeto prioriza a fidelidade aos dados destas versões clássicas.
 
@@ -8,7 +8,11 @@ A aplicação foi concebida especialmente para jogadores de Pokémon FireRed e L
 
 Para executar esta aplicação em seu ambiente local, siga os passos abaixo:
 
-1. Clone o repositório oficial em: https://github.com/carlosxfelipe/my-pokedex
+1. Clone o repositório oficial:
+   ```bash
+   git clone https://github.com/carlosxfelipe/my-pokedex.git
+   cd my-pokedex
+   ```
 2. Certifique-se de ter o Node.js e o ambiente de desenvolvimento (iOS/Android) configurados em sua máquina.
 3. No terminal, acesse a pasta do projeto e instale as dependências:
    ```bash
@@ -34,12 +38,7 @@ Para executar esta aplicação em seu ambiente local, siga os passos abaixo:
 
 ## Arquitetura e Tecnologias
 
-A aplicação combina o ecossistema moderno de React Native com uma estratégia robusta de performance para oferecer uma experiência de consulta rápida e offline:
-
-- **Gerenciamento de Estado e Navegação**: Utiliza **Zustand** para um store leve e escalável, **MMKV** para persistência ultra-rápida de configurações, e **React Navigation** para transições fluidas entre telas.
-
-* **Estratégia de Dados com SQLite**: Toda consulta é persistida via **Expo SQLite**, reduzindo chamadas de rede à PokéAPI. O sistema implementa uma sincronização de "lacunas", buscando apenas IDs ainda não cacheados localmente.
-* **Flexibilidade de Versões**: Embora otimizado para as regras de **FireRed & LeafGreen**, o app permite alternar nas configurações para exibir todas as gerações (**National Pokédex**). Inclui alternância de idioma para golpes (**Inglês/Espanhol**) e filtros por tipo.
+O app utiliza **Expo SQLite** para persistir localmente os dados da PokéAPI, buscando da rede apenas os IDs ainda não cacheados. As configurações do usuário são salvas com **MMKV**, garantindo leitura e escrita ultra-rápidas. O estado global é gerenciado com **Zustand** e a navegação com **React Navigation**.
 
 ## Licença
 
