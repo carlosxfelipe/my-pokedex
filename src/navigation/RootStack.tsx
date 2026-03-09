@@ -38,10 +38,17 @@ export const RootStack = createNativeStackNavigator({
       options: ({ navigation, route, theme }: any) => {
         const appTheme = theme as AppTheme;
         const pokemonName = capitalize(route.params?.name ?? "detalhes");
+        const typeColor = route.params?.color as string | undefined;
         return {
           title: pokemonName,
           headerTitleAlign: "center",
           headerBackTitleVisible: true,
+          headerStyle: {
+            backgroundColor:
+              Platform.OS === "android"
+                ? (typeColor ?? appTheme.colors.primary)
+                : "transparent",
+          },
         };
       },
     },

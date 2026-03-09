@@ -9,6 +9,7 @@ import {
   View,
   TouchableOpacity,
 } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation, useRoute, useTheme } from "@react-navigation/native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ThemedView } from "../../components/ThemedView";
@@ -110,11 +111,13 @@ export function PokemonDetail() {
     <ThemedView style={styles.container}>
       <ThemedStatusBar />
       {/* Header colorido */}
-      <View
+      <LinearGradient
+        colors={[TYPE_COLORS[primaryType] + "80", "transparent"]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 0, y: 1 }}
         style={[
           styles.hero,
           Platform.OS === "android" ? { marginTop: androidHeaderOffset } : null,
-          { backgroundColor: TYPE_COLORS[primaryType] + "40" },
         ]}
       >
         {p.spriteUrl && (
@@ -141,7 +144,7 @@ export function PokemonDetail() {
             </View>
           ))}
         </View>
-      </View>
+      </LinearGradient>
 
       <ScrollView contentContainerStyle={styles.content}>
         {/* Evoluções */}
@@ -162,6 +165,9 @@ export function PokemonDetail() {
                       navigation.push("PokemonDetail", {
                         id: evo.fromId,
                         name: capitalize(evo.fromName),
+                        color: detailById[String(evo.fromId)]
+                          ? TYPE_COLORS[detailById[String(evo.fromId)].types[0]]
+                          : undefined,
                       })
                     }
                   >
@@ -205,6 +211,9 @@ export function PokemonDetail() {
                       navigation.push("PokemonDetail", {
                         id: evo.toId,
                         name: capitalize(evo.toName),
+                        color: detailById[String(evo.toId)]
+                          ? TYPE_COLORS[detailById[String(evo.toId)].types[0]]
+                          : undefined,
                       })
                     }
                   >

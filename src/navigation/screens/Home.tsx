@@ -14,10 +14,12 @@ import { useSettingsStore } from "../../store/useSettingsStore";
 import type { Theme as AppTheme } from "../../themes";
 import { PokemonCard } from "../../components/PokemonCard";
 import { capitalize } from "../../utils/stringUtils";
+import { TYPE_COLORS_LIGHT, TYPE_COLORS_DARK } from "../../utils/pokemonTypes";
 
 export function Home() {
   const navigation = useNavigation<any>();
   const theme = useTheme() as AppTheme;
+  const TYPE_COLORS = theme.dark ? TYPE_COLORS_DARK : TYPE_COLORS_LIGHT;
   const { list, listLoading, listError, loadList, searchQuery } =
     usePokedexStore();
   const { language, typeFilter, showAllGenerations } = useSettingsStore();
@@ -89,6 +91,7 @@ export function Home() {
               navigation.navigate("PokemonDetail", {
                 id: item.id,
                 name: capitalize(item.name),
+                color: TYPE_COLORS[item.types[0]],
               });
             }}
           />
