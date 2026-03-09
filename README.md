@@ -33,8 +33,6 @@ Para executar esta aplicação em seu ambiente local, siga os passos abaixo:
 ### Notas Importantes
 
 - **Build de Desenvolvimento**: O projeto utiliza builds de desenvolvimento (Expo Dev Client) e, por isso, **não funciona no Expo Go**.
-- **Pastas Nativas**: As pastas `ios/` e `android/` são geradas automaticamente e normalmente são ignoradas pelo Git.
-- **Customizações**: Recomenda-se o uso de _config plugins_ do Expo para qualquer customização nativa adicional.
 
 ## Arquitetura e Tecnologias
 
