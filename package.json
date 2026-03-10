@@ -6,7 +6,8 @@
     "start": "expo start --dev-client",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "build:apk": "cd android && ./gradlew assembleRelease && cd .. && mkdir -p apk-build && cp android/app/build/outputs/apk/release/app-release.apk apk-build/"
+    "build:apk": "cd android && ./gradlew assembleRelease && cd .. && mkdir -p apk-build && cp android/app/build/outputs/apk/release/app-release.apk apk-build/",
+    "generate-assets": "node scripts/generate-assets.js"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.1.1",
@@ -39,6 +40,7 @@
     "@types/node": "^25.3.5",
     "@types/react": "~19.1.10",
     "@types/tinycolor2": "^1.4.6",
+    "sharp": "^0.34.5",
     "ts-node": "^10.9.2",
     "typescript": "~5.9.2"
   },
