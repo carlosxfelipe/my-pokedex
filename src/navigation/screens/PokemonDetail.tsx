@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo } from "react";
 import {
-  ActivityIndicator,
   Image,
   Platform,
   StatusBar,
@@ -17,6 +16,7 @@ import { ThemedStatusBar } from "../../components/ThemedStatusBar";
 import { Text } from "../../components/Text";
 import { ContrastText } from "../../components/ContrastText";
 import { Icon } from "../../components/Icon";
+import { PokemonDetailSkeleton } from "../../components/PokemonDetailSkeleton";
 import { usePokedexStore } from "../../store/usePokedexStore";
 import { useSettingsStore } from "../../store/useSettingsStore";
 import type { Theme as AppTheme } from "../../themes";
@@ -85,11 +85,7 @@ export function PokemonDetail() {
   }, [selectedPokemon, showAllGenerations]);
 
   if (detailLoading) {
-    return (
-      <ThemedView style={styles.centered}>
-        <ActivityIndicator size="large" color={theme.colors.primary} />
-      </ThemedView>
-    );
+    return <PokemonDetailSkeleton />;
   }
 
   if (detailError || !selectedPokemon) {

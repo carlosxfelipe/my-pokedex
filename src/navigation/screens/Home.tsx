@@ -1,10 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
-import {
-  ActivityIndicator,
-  FlatList,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import { useEffect, useMemo } from "react";
+import { FlatList, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useTheme } from "@react-navigation/native";
 import { ThemedView } from "../../components/ThemedView";
@@ -13,6 +8,7 @@ import { usePokedexStore } from "../../store/usePokedexStore";
 import { useSettingsStore } from "../../store/useSettingsStore";
 import type { Theme as AppTheme } from "../../themes";
 import { PokemonCard } from "../../components/PokemonCard";
+import { HomeSkeleton } from "../../components/HomeSkeleton";
 import { capitalize } from "../../utils/stringUtils";
 import { TYPE_COLORS_LIGHT, TYPE_COLORS_DARK } from "../../utils/pokemonTypes";
 
@@ -56,13 +52,10 @@ export function Home() {
     return result;
   }, [list, searchQuery, typeFilter, showAllGenerations]);
 
-  if (listLoading) {
-    return (
-      <ThemedView style={styles.centered}>
-        <ActivityIndicator size="large" color={theme.colors.primary} />
-        <Text style={styles.loadingText}>Carregando Pokédex…</Text>
-      </ThemedView>
-    );
+  const showSkeleton = listLoading || (list.length === 0 && !listError);
+
+  if (showSkeleton) {
+    return <HomeSkeleton />;
   }
 
   if (listError) {
