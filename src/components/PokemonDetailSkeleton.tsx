@@ -6,7 +6,7 @@ import { Skeleton } from "./Skeleton";
 export function PokemonDetailSkeleton() {
   return (
     <ThemedView style={styles.container}>
-      <View style={[styles.hero, { paddingTop: 60 }]}>
+      <View style={styles.hero}>
         <Skeleton width={160} height={160} borderRadius={80} />
         <View style={styles.heroInfo}>
           <Skeleton width={60} height={16} borderRadius={4} />
@@ -41,7 +41,7 @@ export function PokemonDetailSkeleton() {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   hero: {
-    paddingBottom: 24,
+    paddingVertical: 24,
     alignItems: "center",
     justifyContent: "center",
   },

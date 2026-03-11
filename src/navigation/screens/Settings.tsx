@@ -53,7 +53,7 @@ export function Settings() {
             <View style={styles.switchTextContainer}>
               <Text style={styles.switchLabel}>Traduzir para o Espanhol</Text>
               <Text style={styles.switchDescription}>
-                Golpes e Pokédex em espanhol. Se desativado, usará inglês.
+                Apenas os nomes dos golpes e movimentos ficarão em espanhol.
               </Text>
             </View>
             <PlatformSwitch
