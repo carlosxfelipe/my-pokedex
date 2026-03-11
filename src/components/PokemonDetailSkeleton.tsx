@@ -1,12 +1,24 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Platform, StatusBar } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ThemedView } from "./ThemedView";
 import { Skeleton } from "./Skeleton";
 
 export function PokemonDetailSkeleton() {
+  const insets = useSafeAreaInsets();
+  const androidHeaderOffset =
+    Platform.OS === "android"
+      ? Math.max(StatusBar.currentHeight ?? 0, insets.top) + 56
+      : 0;
+
   return (
     <ThemedView style={styles.container}>
-      <View style={styles.hero}>
+      <View
+        style={[
+          styles.hero,
+          Platform.OS === "android" ? { marginTop: androidHeaderOffset } : null,
+        ]}
+      >
         <Skeleton width={160} height={160} borderRadius={80} />
         <View style={styles.heroInfo}>
           <Skeleton width={60} height={16} borderRadius={4} />
