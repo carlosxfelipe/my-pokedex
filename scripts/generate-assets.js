@@ -3,6 +3,10 @@ const path = require("path");
 const fs = require("fs");
 
 const ICON_SOURCE = path.resolve(__dirname, "../assets/icon_source.svg");
+const ADAPTIVE_ICON_SOURCE = path.resolve(
+  __dirname,
+  "../assets/adaptive-icon-source.svg",
+);
 const ASSETS_DIR = path.resolve(__dirname, "../assets");
 
 async function generateAssets() {
@@ -23,7 +27,7 @@ async function generateAssets() {
 
     // 2. Adaptive App Icon (1024x1024)
     console.log("   Generating adaptive-icon.png...");
-    await sharp(ICON_SOURCE)
+    await sharp(ADAPTIVE_ICON_SOURCE)
       .resize(1024, 1024)
       .png()
       .toFile(path.join(ASSETS_DIR, "adaptive-icon.png"));
