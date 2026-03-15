@@ -1,4 +1,5 @@
 import { Image, StyleSheet, TouchableOpacity, View } from "react-native";
+import { isUnobtainableInFRLG } from "../utils/unobtainableFRLG";
 import { useTheme } from "@react-navigation/native";
 import { Icon } from "./Icon";
 import { Text } from "./Text";
@@ -24,8 +25,8 @@ export function PokemonCard({ pokemon, onPress }: PokemonCardProps) {
   const exclusive = getExclusiveVersion(pokemon.id);
 
   const BADGE_COLORS = theme.dark
-    ? { firered: "#EF5350", leafgreen: "#66BB6A" }
-    : { firered: "#D32F2F", leafgreen: "#2E7D32" };
+    ? { firered: "#EF5350", leafgreen: "#66BB6A", unavailable: "#888" }
+    : { firered: "#D32F2F", leafgreen: "#2E7D32", unavailable: "#B0B0B0" };
 
   return (
     <TouchableOpacity
@@ -52,26 +53,44 @@ export function PokemonCard({ pokemon, onPress }: PokemonCardProps) {
         )}
       </View>
 
-      {exclusive && (
+      {(exclusive || isUnobtainableInFRLG(pokemon.id)) && (
         <View style={styles.exclusiveBadgesRow}>
-          <View
-            style={[
-              styles.exclusiveBadge,
-              {
-                backgroundColor: BADGE_COLORS[exclusive],
-              },
-            ]}
-          >
-            <Icon
-              type="Ionicons"
-              name={exclusive === "firered" ? "flame" : "leaf"}
-              size={10}
-              color="#fff"
-            />
-            <Text style={styles.exclusiveText}>
-              {exclusive === "firered" ? "FR" : "LG"}
-            </Text>
-          </View>
+          {exclusive && (
+            <View
+              style={[
+                styles.exclusiveBadge,
+                {
+                  backgroundColor: BADGE_COLORS[exclusive],
+                },
+              ]}
+            >
+              <Icon
+                type="Ionicons"
+                name={exclusive === "firered" ? "flame" : "leaf"}
+                size={10}
+                color="#fff"
+              />
+              <Text style={styles.exclusiveText}>
+                {exclusive === "firered" ? "FR" : "LG"}
+              </Text>
+            </View>
+          )}
+          {isUnobtainableInFRLG(pokemon.id) && (
+            <View
+              style={[
+                styles.exclusiveBadge,
+                { backgroundColor: BADGE_COLORS.unavailable },
+              ]}
+            >
+              <Icon
+                type="MaterialCommunityIcons"
+                name="pokeball"
+                size={10}
+                color="#fff"
+              />
+              <Text style={styles.exclusiveText}>INDISP.</Text>
+            </View>
+          )}
         </View>
       )}
 

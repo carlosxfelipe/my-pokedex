@@ -27,6 +27,8 @@ import {
   TYPE_LABELS_PT,
 } from "../../utils/pokemonTypes";
 import { capitalize } from "../../utils/stringUtils";
+import { getTypeChangeById } from "../../utils/typeChanges";
+import { TypeChangeCard } from "../../components/TypeChangeCard";
 
 function MoveRow({ move }: { move: Move }) {
   const theme = useTheme() as AppTheme;
@@ -143,6 +145,27 @@ export function PokemonDetail() {
       </LinearGradient>
 
       <ScrollView contentContainerStyle={styles.content}>
+        {/* Card de observação de tipo antigo */}
+        {(() => {
+          const typeChange = getTypeChangeById(p.id);
+          if (!typeChange) return null;
+          // Pega o tipo principal moderno (primeira palavra antes de / ou espaço)
+          let mainType = undefined;
+          if (p.types && p.types.length > 0) {
+            mainType = p.types[0];
+          } else if (typeChange.typeModern) {
+            mainType = typeChange.typeModern.split("/")[0].trim().toLowerCase();
+          }
+          return (
+            <TypeChangeCard
+              pokemonName={typeChange.name}
+              typeFRLG={typeChange.typeFRLG}
+              typeModern={typeChange.typeModern}
+              mainType={mainType}
+            />
+          );
+        })()}
+
         {/* Evoluções */}
         {filteredEvoChain.length > 0 && (
           <View style={styles.section}>
