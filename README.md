@@ -47,6 +47,8 @@ Veja abaixo algumas telas do aplicativo My Pokédex:
    <img src="./screenshots/Screenshot_20260315_180941_My%20Pokdex.jpg" alt="Screenshot 2" width="250" />
    <img src="./screenshots/Screenshot_20260315_181014_My%20Pokdex.jpg" alt="Screenshot 3" width="250" />
    <img src="./screenshots/Screenshot_20260315_181023_My%20Pokdex.jpg" alt="Screenshot 4" width="250" />
+   <img src="./screenshots/Screenshot_20260315_181429_My%20Pokdex.jpg" alt="Screenshot 5" width="250" />
+   <img src="./screenshots/Screenshot_20260315_181444_My%20Pokdex.jpg" alt="Screenshot 6" width="250" />
 </p>
 
 ## Licença
