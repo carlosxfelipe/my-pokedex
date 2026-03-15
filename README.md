@@ -38,6 +38,17 @@ Para executar esta aplicação em seu ambiente local, siga os passos abaixo:
 
 O app utiliza **Expo SQLite** para persistir localmente os dados da PokéAPI, buscando da rede apenas os IDs ainda não cacheados. As configurações do usuário são salvas com **MMKV**, garantindo leitura e escrita ultra-rápidas. O estado global é gerenciado com **Zustand** e a navegação com **React Navigation**.
 
+## Screenshots
+
+Veja abaixo algumas telas do aplicativo My Pokédex:
+
+<p align="center">
+   <img src="./screenshots/Screenshot_20260315_180931_My%20Pokdex.jpg" alt="Screenshot 1" width="250" />
+   <img src="./screenshots/Screenshot_20260315_180941_My%20Pokdex.jpg" alt="Screenshot 2" width="250" />
+   <img src="./screenshots/Screenshot_20260315_181014_My%20Pokdex.jpg" alt="Screenshot 3" width="250" />
+   <img src="./screenshots/Screenshot_20260315_181023_My%20Pokdex.jpg" alt="Screenshot 4" width="250" />
+</p>
+
 ## Licença
 
 Este projeto está licenciado sob a **GNU General Public License v3.0 (GPLv3)**. Para mais detalhes, consulte o arquivo [LICENSE](./LICENSE). Diferente de licenças mais permissivas (como a MIT), esta licença garante que o código-fonte e quaisquer melhorias feitas por terceiros permaneçam obrigatoriamente abertos e sob os mesmos termos, impedindo o uso do código em softwares proprietários de código fechado.
