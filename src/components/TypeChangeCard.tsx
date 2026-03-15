@@ -8,7 +8,7 @@ interface Props {
   pokemonName: string;
   typeFRLG: string;
   typeModern: string;
-  mainType?: string; // tipo principal moderno (opcional)
+  mainType?: string;
 }
 
 export function TypeChangeCard({
@@ -18,25 +18,48 @@ export function TypeChangeCard({
   mainType,
 }: Props) {
   const { colors, dark } = useTheme();
-  // Descobrir cor do tipo principal
+
   let accentColor = undefined;
+
   if (mainType) {
     const typeKey = mainType.toLowerCase().split("/")[0].trim();
     accentColor = (dark ? TYPE_COLORS_DARK : TYPE_COLORS_LIGHT)[
       typeKey as import("../domain/value-objects/PokemonType").PokemonType
     ];
   }
+
   return (
-    <View style={[styles.container]}>
+    <View
+      style={[
+        styles.card,
+        {
+          backgroundColor: colors.card,
+          borderLeftColor: accentColor,
+        },
+      ]}
+    >
       <Text style={[styles.body, { color: colors.text }]}>
         Em{" "}
-        <Text style={{ color: accentColor }}>Pokémon FireRed & LeafGreen</Text>,{" "}
-        <Text style={{ color: accentColor }}>{pokemonName}</Text> era do tipo{" "}
-        <Text style={{ color: accentColor }}>{typeFRLG}</Text>.{"\n"}Nas
-        gerações modernas, ele é do tipo{" "}
-        <Text style={{ color: accentColor }}>{typeModern}</Text>.
+        <Text style={{ color: accentColor, fontWeight: "600" }}>
+          Pokémon FireRed & LeafGreen
+        </Text>
+        ,{" "}
+        <Text style={{ color: accentColor, fontWeight: "600" }}>
+          {pokemonName}
+        </Text>{" "}
+        era do tipo{" "}
+        <Text style={{ color: accentColor, fontWeight: "600" }}>
+          {typeFRLG}
+        </Text>
+        .{"\n\n"}
+        Nas gerações modernas, ele é do tipo{" "}
+        <Text style={{ color: accentColor, fontWeight: "600" }}>
+          {typeModern}
+        </Text>
+        .
       </Text>
-      <Text>
+
+      <Text style={[styles.note, { color: colors.text }]}>
         Isso ocorre porque o tipo Fairy só foi criado na Geração 6 (Pokémon
         X/Y).
       </Text>
@@ -45,15 +68,24 @@ export function TypeChangeCard({
 }
 
 const styles = StyleSheet.create({
-  container: {
-    borderRadius: 10,
-    padding: 14,
+  card: {
+    borderRadius: 14,
+    padding: 16,
     marginVertical: 12,
-  },
-  title: {
-    marginBottom: 6,
+    borderLeftWidth: 4,
+    shadowColor: "#000",
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 3,
   },
   body: {
-    marginBottom: 8,
+    fontSize: 15,
+    lineHeight: 22,
+  },
+  note: {
+    marginTop: 10,
+    fontSize: 13,
+    opacity: 0.7,
   },
 });
