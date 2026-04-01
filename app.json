@@ -25,7 +25,10 @@
       },
       "package": "com.mypokedex",
       "permissions": [
-        "INTERNET"
+        "INTERNET",
+        "VIBRATE",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
       ],
       "usesCleartextTraffic": true
     },
